@@ -1,0 +1,4 @@
+{
+  "mongoURI": "mongodb+srv://nguyenvandiatlvn3:123456789A@cluster0.ib7bjuw.mongodb.net/postmicros?retryWrites=true&w=majority",
+  "jwtSecret": "mysecrettoken6729"
+}
