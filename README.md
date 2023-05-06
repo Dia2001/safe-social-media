@@ -1,6 +1,6 @@
 # microservice-post
 ### Table user
-``` json
+``` 
 {
   name: 'Nguyen Van Dia',
   email: 'nguyenvandiatlvn3@gmail.com',
@@ -11,7 +11,7 @@
 ```
 
 ### Table profile
-``` json
+``` 
 {
 	user: {
 		type: mongoose.Schema.Types.ObjectId,
@@ -61,7 +61,7 @@
 ```
 
 ### Table post
-``` json
+``` 
 user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "user",
