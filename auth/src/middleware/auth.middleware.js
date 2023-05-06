@@ -13,7 +13,7 @@ module.exports = function (req, res, next) {
 
   //if the header includes token, verify token
   try {
-    const decoded = jwt.verify(token, config.get("jwtSecret"));
+    const decoded = jwt.verify(token, config.get("mysecrettoken6729"));
     req.user = decoded.currentUser; //get user id after verify token, then assign user id to req.user
     return next();
   } catch (err) {
