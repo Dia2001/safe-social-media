@@ -6,7 +6,8 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const config = require("config");
 const { check, validationResult } = require("express-validator");
-
+const dotenv = require('dotenv');
+dotenv.config();
 //@route GET api/auth
 //@desc  Test route
 //@access Public
@@ -64,7 +65,7 @@ router.post(
           id: user.id,
         },
       };
-      const token = jwt.sign(payload, "mysecrettoken6729", {
+      const token = jwt.sign(payload,process.env.jwtSecret, {
         expiresIn: 360000,
       });
       return res.status(200).json({ message: "login successfully", token });

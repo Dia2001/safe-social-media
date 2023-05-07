@@ -1,13 +1,15 @@
 const mongoose = require("mongoose");
-const config = require("config");
+//const config = require("config");
 
 // const db = config.get("mongoURI");
+const dotenv = require('dotenv');
+dotenv.config();
 
 const connectDB = async () => {
   try {
     mongoose.set("strictQuery", true);
     await mongoose.connect(
-      "mongodb+srv://nguyenvandiatlvn3:123456789A@cluster0.ib7bjuw.mongodb.net/postmicros?retryWrites=true&w=majority",
+      process.env.mongoURI,
       {
         useNewUrlParser: true,
       }

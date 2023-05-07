@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
-const config = require("config");
+const dotenv = require('dotenv');
+dotenv.config();
 
 module.exports = function (req, res, next) {
   //get token from header
@@ -13,7 +14,7 @@ module.exports = function (req, res, next) {
 
   //if the header includes token, verify token
   try {
-    const decoded = jwt.verify(token, config.get("mysecrettoken6729"));
+    const decoded = jwt.verify(token,process.env.jwtSecret);
     req.user = decoded.currentUser; //get user id after verify token, then assign user id to req.user
     return next();
   } catch (err) {
