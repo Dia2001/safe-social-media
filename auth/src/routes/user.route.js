@@ -27,8 +27,9 @@ router.post(
         err: errors.array(),
       });
     }
+    console.log(":))")
     //request, response
-    const { name, email, password } = req.body;
+    const { name, email, password,phone} = req.body;
     try {
       //see if user already exists
       let user = await User.findOne({ email });
@@ -39,12 +40,13 @@ router.post(
       }
 
       //get user gravatar
-      const avatar = gravatar.url(email, {
-        s: "200",
-        r: "pg",
-        d: "mm",
-      });
-      user = new User({ name, email, password, avatar });
+      // const avatar = gravatar.url(email, {
+      //   s: "200",
+      //   r: "pg",
+      //   d: "mm",
+      // });
+      const avatar= gravatar.url(email ,  {s: '100', r: 'x', d: 'retro'}, true)
+      user = new User({ name, email, password, avatar ,phone});
 
       //encrypt password
       const salt = await bcrypt.genSalt(10);

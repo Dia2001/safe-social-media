@@ -9,7 +9,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 console.log(process.env.mongoURI)
 var corsOptions = {
-  origin: "http://localhost:3001",
+  origin: "http://localhost:3000",
 };
 
 //connect database

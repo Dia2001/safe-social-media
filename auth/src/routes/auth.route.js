@@ -28,7 +28,7 @@ router.get("/", authMiddleware, async (req, res) => {
 //@desc  authentication and login route
 //@access Public
 router.post(
-  "/",
+  "/login",
   //validation
   [
     check("email", "please include a valid email").isEmail(),

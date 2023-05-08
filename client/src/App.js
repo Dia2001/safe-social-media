@@ -1,5 +1,14 @@
+import Header from "./components/Header";
+import Login from "./pages/login/Login";
+import Register from "./pages/register/Register";
+
 function App() {
-  return <h1 className="text-3xl font-bold underline">Hello world!</h1>;
+  return (
+    <div>
+      <Header />
+      <Register />
+    </div>
+  );
 }
 
 export default App;
