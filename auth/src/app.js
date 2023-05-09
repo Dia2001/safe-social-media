@@ -8,9 +8,9 @@ const authRouter = require("./routes/auth.route");
 const dotenv = require('dotenv');
 dotenv.config();
 console.log(process.env.mongoURI)
-var corsOptions = {
-  origin: "http://localhost:3000",
-};
+// var corsOptions = {
+//   origin: "http://localhost:3000",
+// };
 
 //connect database
 connectDB();
@@ -19,7 +19,10 @@ connectDB();
 app.use(express.urlencoded({ extended: true }));
 
 //middleware
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
+app.use(cors({
+  origin: '*'
+}));
 
 app.use(express.json());
 

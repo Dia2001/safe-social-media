@@ -23,7 +23,7 @@ const FormLogin = () => {
 
   const handleLogin = async (e) => {
     const result = await AuthService.login(email,password);
-    console.log( result.data.token)
+    console.log(result.data.token)
     if (result) {
       localStorage.setItem("token", result.data.token);
       alert('login sucess')

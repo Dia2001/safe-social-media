@@ -2,7 +2,6 @@ import axios from "axios";
 import config from "../config";
 import { getToken, getHeaders } from "../utils";
 async function register(email, pass, name, phone) {
-  console.log(config.BASE_API);
   console.log(email, pass, name, phone);
   try {
     await axios.post(`${config.BASE_API}/users`, {
