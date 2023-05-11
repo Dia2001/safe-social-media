@@ -1,3 +1,30 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+h1{
+      font-size: 90.44px;
+      font-weight: bold;
+    }
+    h2{
+      font-size: 63.96px;
+      font-weight: bold;
+    }
+    h3{
+      font-size: 45.23px;
+      font-weight: bold;
+    }
+    h4{
+      font-size: 31.99px;
+      font-weight: bold;
+    }
+    h5{
+      font-size: 22.62px;
+    }
+    h6{
+      font-size: 16px;
+    }
+    p{
+      font-size: 11.32px;
+    }
+  

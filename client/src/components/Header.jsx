@@ -2,11 +2,13 @@ import React from "react";
 import { BsSearch, BsBell } from "react-icons/bs";
 import { BiMessageSquare } from "react-icons/bi";
 import { Link } from "react-router-dom";
+import config from "../config";
 
 const Header = () => {
   return (
-    <header className="flex bg-white justify-between items-center border-b-2">
+    <header className="sticky top-0 z-50 opacity-80 flex bg-white justify-between items-center border-b-2">
       <div className="w-auto flex items-center">
+        <Link to={config.routes.home}>
         <svg
           width="194"
           height="78"
@@ -92,6 +94,7 @@ const Header = () => {
             </linearGradient>
           </defs>
         </svg>
+        </Link>
       </div>
       <div className=" search m-2x flex gap-2 items-center">
         <input
