@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
-class Loginpage extends StatefulWidget {
-  const Loginpage({Key? key}) : super(key: key);
+class LoginPage extends StatefulWidget {
+  const LoginPage({Key? key}) : super(key: key);
   @override
-  State<Loginpage> createState() => _LoginPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<Loginpage> {
+class _LoginPageState extends State<LoginPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   @override
@@ -20,21 +21,23 @@ class _LoginPageState extends State<Loginpage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                SizedBox(
+                  height: 70,
+                ),
                 //Hello again!
-                Text(
-                  'Trello',
-                  style: GoogleFonts.b612(
-                    fontSize: 52,
-                  ),
+                SvgPicture.asset(
+                  'assets/images/iconweb.svg',
+                  semanticsLabel: 'An SVG image',
+                  height: 70,
                 ),
                 //Hello again!
                 SizedBox(
                   height: 10,
                 ),
                 Text(
-                  'Sign in to continue to:',
+                  'Sofe Social - Mạng xã hội trực tuyến an toàn',
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 17,
                   ),
                 ),
                 SizedBox(height: 50),
@@ -54,7 +57,7 @@ class _LoginPageState extends State<Loginpage> {
                         controller: emailController,
                         decoration: InputDecoration(
                           border: InputBorder.none,
-                          hintText: 'Email',
+                          hintText: 'Nhập tên email',
                         ),
                       ),
                     ),
@@ -79,7 +82,7 @@ class _LoginPageState extends State<Loginpage> {
                         obscureText: true,
                         decoration: InputDecoration(
                           border: InputBorder.none,
-                          hintText: 'Password',
+                          hintText: 'Nhập mật khẩu',
                         ),
                       ),
                     ),
@@ -89,20 +92,64 @@ class _LoginPageState extends State<Loginpage> {
                   height: 10,
                 ),
 
-                //sign in button
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Center(
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: 50.0,
                     child: ElevatedButton(
                       onPressed: () {
-                        print(emailController.text);
-                        print(passwordController.text);
-                        print('success');
+                        print(emailController);
                       },
-                      child: Text("hello"),
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(Colors.blue),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.0),
+                          ),
+                        ),
+                      ),
+                      child: Text(
+                        "Đăng nhập ",
+                        style: TextStyle(fontSize: 17),
+                      ),
                     ),
                   ),
                 ),
+
+                SizedBox(
+                  height: 10,
+                ),
+
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: 50.0,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        print(emailController);
+                      },
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            Color.fromARGB(255, 33, 243, 103)),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.0),
+                          ),
+                        ),
+                      ),
+                      child: Text(
+                        "Đăng ký ",
+                        style: TextStyle(fontSize: 17),
+                      ),
+                    ),
+                  ),
+                ),
+
                 SizedBox(
                   height: 25,
                 ),
@@ -112,13 +159,29 @@ class _LoginPageState extends State<Loginpage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Not a member?',
+                      'Bạn quên mật khẩu?',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 150,
+                ),
+
+                // not a member? register now
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Develop by ',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     Text(
-                      'Register now',
+                      'Dia&Nhan&Tien',
                       style: TextStyle(
                         color: Colors.blue,
                         fontWeight: FontWeight.bold,

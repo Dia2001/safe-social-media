@@ -23,6 +23,7 @@ class Routes {
     });
 
     this.app.post("/api/v1/auth/login", (req, res) => {
+      console.log(req.body);
       console.log(
         `Proxying ${req.method} request to http://localhost:5010${req.url}`
       );

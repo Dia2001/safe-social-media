@@ -14,13 +14,13 @@ class _LoginPageState extends State<LoginPage1> {
   Future<Map<String, dynamic>> _login() async {
     final String apiUrl = "http://localhost:9999/api/v1/auth/login";
     print("hello");
-    var client = http.Client();
-    final response = await http.post(Uri.parse(apiUrl), body: {
-      "email": _emailController.text.trim(),
-      "password": _passwordController.text.trim(),
-    });
+    final body = {
+      'email': _emailController.text.trim(),
+      'password': _passwordController.text.trim(),
+    };
+    final response = await http.post(Uri.parse(apiUrl),
+        headers: {'Content-Type': 'application/json'}, body: json.encode(body));
     print(response.statusCode);
-    client.close();
     if (response.statusCode == 200) {
       Map<String, dynamic> user = json.decode(response.body);
       return user;

@@ -35,14 +35,18 @@ router.post(
     check("password", "password is required").exists(),
   ],
   async (req, res) => {
+    console.log(req.body);
+    console.log("check");
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+      console.log(errors.array());
       return res.status(400).json({
         err: errors.array(),
       });
     }
 
     const { email, password } = req.body;
+    console.log(email);
     try {
       //check if email match
       let user = await User.findOne({ email: email });

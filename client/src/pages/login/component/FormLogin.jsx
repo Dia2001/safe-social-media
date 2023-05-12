@@ -103,7 +103,7 @@ const FormLogin = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          {isShowPass ? (
+          {!isShowPass ? (
             <EyeOff
               className="absolute right-4 bottom-4"
               onClick={() => setIsShowPass(!isShowPass)}
