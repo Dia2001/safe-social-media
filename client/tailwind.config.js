@@ -49,11 +49,12 @@ module.exports = {
         'GradientO2':'linear-gradient(to left,#0061FF 0%,#60EFFF 100%)',
       },
       colors:{
-        'Primary':'#A5C9CA',
-        'MainBlue':'#E7F6F2',
-        'LightBlue':'#9CBBFC',
-        'DarkBlue':'#4741A6',
-       
+        'Primary':'#003060',
+        'Secondary':'#055C9D',
+        'Secondary2':'#0E86D4',
+        'Secondary3':'#68BBE3',
+        'Secondary4':'#B9E9FC',
+        'Secondary5':'#DAF5FF',
 
         'BlackCool':'#2C3333',
         'Black75':'#616666',
@@ -62,7 +63,7 @@ module.exports = {
         'Black10':'#e9eaea',
         'Black5':'#f4f4f4',
 
-        'ErrorColor':'#E85353',
+        'ErrorColor':'#FD4040',
         'WarningColor':'#F9CE69',
         'ActiveColor':'#A7D129'
       }
