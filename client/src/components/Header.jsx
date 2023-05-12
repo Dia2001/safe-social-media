@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { BsSearch, BsBell } from "react-icons/bs";
 import { BiMessageSquare } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import config from "../config";
 
 const Header = () => {
+  const [auth,SetAuth]=useState(false)
   return (
     <header className="sticky top-0 z-50 opacity-80 flex bg-white justify-between items-center border-b-2">
       <div className="w-auto flex items-center">
