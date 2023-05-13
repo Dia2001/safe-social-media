@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:mobile/global.dart';
+import 'package:mobile/utils/SharedPrefsUtils.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -9,8 +13,32 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+
+  Future<void> _login() async {
+    // final String apiUrl = "http://localhost:9999/api/v1/auth/login";
+    // print("hello");
+    final body = {
+      'email': _emailController.text.trim(),
+      'password': _passwordController.text.trim(),
+    };
+    final response = await http.post(Uri.parse(host + '/api/v1/auth/login'),
+        headers: {'Content-Type': 'application/json'}, body: json.encode(body));
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      Map<String, dynamic> data = json.decode(response.body);
+      //   SharedPrefsUtils.saveToken(data['']);
+      Navigator.pushReplacementNamed(
+        context,
+        '/home',
+        arguments: {'token': data['token']},
+      );
+    } else {
+      throw Exception('Failed to login');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,7 +82,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: Padding(
                       padding: const EdgeInsets.only(left: 20.0),
                       child: TextField(
-                        controller: emailController,
+                        controller: _emailController,
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           hintText: 'Nhập tên email',
@@ -78,7 +106,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: Padding(
                       padding: const EdgeInsets.only(left: 20.0),
                       child: TextField(
-                        controller: passwordController,
+                        controller: _passwordController,
                         obscureText: true,
                         decoration: InputDecoration(
                           border: InputBorder.none,
@@ -98,8 +126,8 @@ class _LoginPageState extends State<LoginPage> {
                     width: MediaQuery.of(context).size.width,
                     height: 50.0,
                     child: ElevatedButton(
-                      onPressed: () {
-                        print(emailController);
+                      onPressed: () async {
+                        await _login();
                       },
                       style: ButtonStyle(
                         backgroundColor:
@@ -130,7 +158,7 @@ class _LoginPageState extends State<LoginPage> {
                     height: 50.0,
                     child: ElevatedButton(
                       onPressed: () {
-                        print(emailController);
+                        print(_emailController);
                       },
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(
