@@ -2,17 +2,25 @@ const httpProxy = require("express-http-proxy");
 const dotenv = require("dotenv");
 dotenv.config();
 const authServiceProxy = httpProxy(process.env.AUTH_SERVICE_URL);
-
+const postServiceProxy = httpProxy(process.env.POST_SERVICE_URL);
 const express = require("express");
 const cors = require("cors");
+//       //configuaration multer
+// const path=require('path')
+// const multer=require("multer");
+// const storage=multer.diskStorage({
+//     destination:(req,file,cb)=>{
+//         cb(null,"E:/WebFrontEnd/nodejs-05-01-2023/microservice-post/post/public/images")
+//     },
+//     filename:(req,file,cb)=>{
+//         console.log(file);
+//         cb(null,Date.now()+path.extname(file.originalname))
+//     }
+// })
+// const upload=multer({storage:storage})
 
 class Routes {
   constructor(app) {
-    // app.use(
-    //   cors({ origin: "http://localhost:3000"})
-    // );
-    // app.use(express.urlencoded({ extended: true }));
-    // app.use(express.json());
     this.app = app;
   }
 
@@ -37,6 +45,15 @@ class Routes {
       );
       authServiceProxy(req, res);
     });
+
+    // this.app.post("/post-article",upload.single('image'),(req, res) => {
+    //     postServiceProxy(req, res);
+    // });
+
+    this.app.get("/home", (req, res) => {
+      postServiceProxy(req, res);
+    });
+
   }
 
   routesConfig() {

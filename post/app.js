@@ -76,6 +76,7 @@ app.post("/post",auth, async (req, res)=>{
 
 //post with image and paragraph
 app.post('/post-article',auth,upload.single('image'),async (req, res) =>{
+    console.log("dô");
     try{
       //check if paragraph not null and less then 225 characters
       const paragraph = req.body.paragraph;
@@ -86,14 +87,14 @@ app.post('/post-article',auth,upload.single('image'),async (req, res) =>{
            if(req.file!=null){
                    const post=Post.create({
                        text:paragraph,
-                       user:req.user.user_id,
-                       image:req.file.path
+                       user:req.user.id,
+                       image:req.file.filename
                    }).then(()=>res.status(201).send('Post with image and paragraph'))
            
             }else{
                 const post=Post.create({
                     text:paragraph,
-                    user:req.user.user_id,
+                    user:req.user.id,
                 }).then(()=>res.status(201).send('Post without image'))
             }
       }else

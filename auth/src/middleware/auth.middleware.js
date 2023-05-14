@@ -5,7 +5,7 @@ dotenv.config();
 module.exports = function (req, res, next) {
   //get token from header
   //when send a request to a protected route, need to send the token within the header
-  const token = req.header("x-auth-token");
+  const token = req.header("x-access-token");
 
   //check if not token
   if (!token) {
@@ -15,6 +15,7 @@ module.exports = function (req, res, next) {
   //if the header includes token, verify token
   try {
     const decoded = jwt.verify(token,process.env.jwtSecret);
+    console.log(decoded.currentUser);
     req.user = decoded.currentUser; //get user id after verify token, then assign user id to req.user
     return next();
   } catch (err) {
