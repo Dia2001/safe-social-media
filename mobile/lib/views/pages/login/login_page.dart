@@ -31,27 +31,27 @@ class _LoginPageState extends State<LoginPage> {
       Map<String, dynamic> data = json.decode(response.body);
       SharedPrefsUtil.saveToken(data['token']);
       // Nếu đăng nhập thành công, hiển thị thông báo tost
-      Fluttertoast.showToast(
-        msg: "Đăng nhập thành công!",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 5,
-        backgroundColor: Colors.green,
-        textColor: Colors.white,
-        fontSize: 16.0,
-        // Đặt offset để hiển thị Toast bên trên bên dưới một tí
-        // Tính từ tâm của Toast
-        // Giá trị offset theo chiều dọc là số âm, càng nhỏ thì Toast càng lên cao
-        // Giá trị offset theo chiều ngang là số dương hoặc số âm đều được
-        // Ví dụ: offset: Offset(0.0, -50.0) sẽ đặt Toast bên trên bên dưới màn hình, cách mép dưới màn hình 50 điểm ảnh
+      // Fluttertoast.showToast(
+      //   msg: "Đăng nhập thành công!",
+      //   toastLength: Toast.LENGTH_SHORT,
+      //   gravity: ToastGravity.BOTTOM,
+      //   timeInSecForIosWeb: 5,
+      //   backgroundColor: Colors.green,
+      //   textColor: Colors.white,
+      //   fontSize: 16.0,
+      // Đặt offset để hiển thị Toast bên trên bên dưới một tí
+      // Tính từ tâm của Toast
+      // Giá trị offset theo chiều dọc là số âm, càng nhỏ thì Toast càng lên cao
+      // Giá trị offset theo chiều ngang là số dương hoặc số âm đều được
+      // Ví dụ: offset: Offset(0.0, -50.0) sẽ đặt Toast bên trên bên dưới màn hình, cách mép dưới màn hình 50 điểm ảnh
+      // );
+      // Future.delayed(Duration(seconds: 10), () {
+      Navigator.pushReplacementNamed(
+        context,
+        '/home',
       );
-      Future.delayed(Duration(seconds: 10), () {
-        Navigator.pushReplacementNamed(
-          context,
-          '/home',
-        );
-        // Hành động cần thực hiện sau khi hàm dừng trong 2 giây
-      });
+      // Hành động cần thực hiện sau khi hàm dừng trong 2 giây
+      //});
     } else {
       throw Exception('Failed to login');
     }

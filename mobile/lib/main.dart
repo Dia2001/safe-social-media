@@ -20,8 +20,8 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         initialRoute: '/',
         routes: {
-          // '/': (context) => LoadingScreen(),
-          '/': (context) => UpPost(),
+          '/': (context) => LoadingScreen(),
+          //'/': (context) => UpPost(),
           '/login': (context) => LoginPage(),
           '/home': (context) => HomePage(),
         }
