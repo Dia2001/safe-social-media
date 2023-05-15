@@ -1,6 +1,7 @@
 require("dotenv").config();
 require("./config/database").connect();
 const express = require("express");
+const cors = require("cors");
 var bcrypt=require("bcryptjs");
 const jwt=require("jsonwebtoken");
 const app = express();
@@ -13,6 +14,9 @@ const Image=require("./models/image");
 const port=process.env.PORT
 
 //allow client access your image 
+app.use(cors({
+    origin: '*'
+}));
 app.use(express.static('public'));
 app.use("/images", express.static("images"));
 

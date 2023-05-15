@@ -30,6 +30,10 @@ class Routes {
       authServiceProxy(req, res);
     });
 
+    this.app.get("/api/v1/users/:id", (req, res) => {
+      authServiceProxy(req, res);
+    });
+
     this.app.post("/api/v1/auth/login", (req, res) => {
       console.log(req.body);
       console.log(
@@ -51,6 +55,7 @@ class Routes {
     // });
 
     this.app.get("/home", (req, res) => {
+      console.log("hello");
       postServiceProxy(req, res);
     });
 

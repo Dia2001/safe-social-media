@@ -81,4 +81,21 @@ router.post(
   }
 );
 
+//@route GET api/users/:id
+//@desc  get a user by id
+//@access Private
+router.get("/:id",async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) return res.status(404).json({ msg: "No user found" });
+    return res.status(200).json(user);
+  } catch (err) {
+    console.error(err.message);
+    if (err.kind === "ObjectId") {
+      return res.status(404).json({ msg: "No user found" });
+    }
+    return res.status(500).send("server error");
+  }
+})
+
 module.exports = router;

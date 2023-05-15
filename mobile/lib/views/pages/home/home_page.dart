@@ -1,32 +1,14 @@
-import 'dart:html';
-
 import 'package:flutter/material.dart';
-import 'package:mobile/views/register_page.dart';
-import 'package:mobile/views/login_page.dart';
+import 'package:mobile/views/pages/register/register_page.dart';
+import 'package:mobile/views/pages/login/login_page.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-
-Future request(
-    {required String path,
-    Map<String, dynamic> data = const {},
-    String type = "get"}) async {
-  final response = type == "get"
-      ? await http.get(Uri.parse(path))
-      : await http.post(Uri.parse(path),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-          body: jsonEncode(data));
-
-  return response;
-}
+import 'package:mobile/services/post_service.dart';
+import 'package:mobile/models/post.dart';
+import 'package:mobile/utils/DurationUtil.dart';
+import 'package:mobile/utils/SharedPrefsUtil.dart';
 
 class HomePage extends StatefulWidget {
-  final String text;
-  final int maxLines;
-  const HomePage({Key? key, required this.text, this.maxLines = 2})
-      : super(key: key);
+  const HomePage({Key? key}) : super(key: key);
   @override
   State<HomePage> createState() => _HomePageState();
 }
@@ -34,14 +16,40 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
   bool isExpanded = false;
+
+  final PostService _postService = PostService();
+  List<Post> _posts = [];
+  bool _token = false;
+
   final List<Widget> _children = [
     LoginPage(),
     RegisterPage(),
   ];
 
-  void onTabTapped(int index) {
+  @override
+  void initState() {
+    super.initState();
+    _loadPosts();
+    getToken();
+  }
+
+  // void onTabTapped(int index) {
+  //   setState(() {
+  //     _currentIndex = index;
+  //   });
+  // }
+
+  Future<void> _loadPosts() async {
+    final posts = await _postService.fetchPosts();
     setState(() {
-      _currentIndex = index;
+      _posts = posts;
+    });
+  }
+
+  Future<void> getToken() async {
+    bool token = await SharedPrefsUtil.hasToken();
+    setState(() {
+      _token = token;
     });
   }
 
@@ -49,17 +57,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
-    bool isLoggedIn = false;
-    final Map<String, dynamic>? arguments =
-        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-    final String token = arguments?['token'] ?? '';
-    if (token != null) {
-      print(token);
-      print(token);
-      print(token);
-    } else {
-      print("token null");
-    }
+    //bool isLoggedIn = false;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -81,10 +79,13 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Visibility(
-                  visible: isLoggedIn,
+                  visible: _token,
                   child: CircleAvatar(
                     radius: 18, // kích thước bán kính của ảnh tròn
-                    backgroundImage: AssetImage('assets/images/dia.png'),
+                    // backgroundImage: AssetImage('assets/images/dia.png')https://s.gravatar.com/avatar/e753f9af9008b724d5852cf5181999e3?s=100&r=x&d=retro
+                    backgroundImage: NetworkImage(
+                        // 'https://s.gravatar.com/avatar/e753f9af9008b724d5852cf5181999e3?s=100&r=x&d=retro'
+                        'https://s.gravatar.com/avatar/05a27a463c7f36f30f35a76897d5e9ee?s=100&r=x&d=retro'),
                   ),
                   replacement: IconButton(
                     icon: Icon(Icons.account_circle),
@@ -125,20 +126,22 @@ class _HomePageState extends State<HomePage> {
       //  body: _children[_currentIndex],
       body: ListView.builder(
         padding: EdgeInsets.symmetric(horizontal: 20.0),
-        itemCount: 10,
+        itemCount: _posts.length,
         itemBuilder: (BuildContext context, int index) {
+          final post = _posts[index];
           return Card(
             child: Column(
               children: <Widget>[
                 ListTile(
                   leading: CircleAvatar(
                     radius: 20, // kích thước bán kính của ảnh tròn
-                    backgroundImage: AssetImage('assets/images/dia.png'),
+                    //backgroundImage: AssetImage('assets/images/dia.png'),
+                    backgroundImage: NetworkImage(post.avatarUser),
                   ),
                   title: Container(
                     margin: EdgeInsets.only(top: 4),
                     child: Text(
-                      'Nguyễn Văn Dìa',
+                      post.nameUser,
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
@@ -149,19 +152,17 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       Icon(Icons.public, size: 16),
                       SizedBox(width: 2),
-                      Text('Hôm qua lúc 20:00'),
+                      Text(DurationUtil.timeAgoSinceDate(post.date).toString()),
                     ],
                   ),
                 ),
                 SizedBox(
-                  width: 400,
-                  height: 300,
-                  child: Image.asset(
-                    'assets/images/dia.png',
-                    fit: BoxFit
-                        .cover, // thay đổi kích thước để ảnh đầy đủ khung hình
-                  ),
-                ),
+                    width: 400,
+                    child: Image.network(
+                      // postImg + post.image,
+                      'http://localhost:3080/images//1684048257573.jpg',
+                      fit: BoxFit.cover,
+                    )),
                 SizedBox(height: 10),
                 Padding(
                   padding: EdgeInsets.fromLTRB(21.0, 0, 21.0, 15.0),
@@ -169,8 +170,8 @@ class _HomePageState extends State<HomePage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        widget.text,
-                        maxLines: isExpanded ? null : widget.maxLines,
+                        post.text,
+                        maxLines: isExpanded ? null : 2,
                         overflow: TextOverflow.clip,
                         textAlign: TextAlign.justify,
                         style: textTheme.bodyText2,
@@ -235,13 +236,14 @@ class _HomePageState extends State<HomePage> {
           );
         },
       ),
+
       bottomNavigationBar: BottomNavigationBar(
         elevation: 10.0,
         selectedItemColor:
             Colors.black, // thiết lập màu cho icon button được chọn
         unselectedItemColor:
             Colors.grey, // thiết lập màu cho các icon button chưa được chọn
-        onTap: onTabTapped,
+        // onTap: onTabTapped,
         // currentIndex: _currentIndex,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
