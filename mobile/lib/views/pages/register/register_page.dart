@@ -18,7 +18,7 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController _fullNameController = TextEditingController();
   TextEditingController _phoneNumberController = TextEditingController();
 
-  Future<Map<String, dynamic>> _register() async {
+  Future<void> _register() async {
     final String apiUrl = "http://localhost:9999/api/v1/users";
     print("hello");
     final body = {
@@ -31,8 +31,11 @@ class _RegisterPageState extends State<RegisterPage> {
         headers: {'Content-Type': 'application/json'}, body: json.encode(body));
     print(response.statusCode);
     if (response.statusCode == 200) {
-      Map<String, dynamic> data = json.decode(response.body);
-      return data;
+      //Map<String, dynamic> data = json.decode(response.body);
+      Navigator.pushReplacementNamed(
+        context,
+        '/login',
+      );
     } else {
       throw Exception('Failed to user register');
     }
@@ -196,8 +199,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     height: 50.0,
                     child: ElevatedButton(
                       onPressed: () async {
-                        Map<String, dynamic> data = await _register();
-                        print(data['token']);
+                        await _register();
                       },
                       style: ButtonStyle(
                         backgroundColor:

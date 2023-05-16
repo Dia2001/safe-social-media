@@ -6,8 +6,8 @@ import 'package:mobile/utils/SharedPrefsUtil.dart';
 import 'package:mobile/views/pages/home/components/appbar.dart';
 import 'package:mobile/views/pages/home/components/listpost.dart';
 import 'package:mobile/views/components/bottom_navigate_bar.dart';
-import 'package:mobile/views/pages/home/components/uploadpost_form.dart';
-import 'package:mobile/views/pages/home/components/test.dart';
+import 'package:mobile/views/pages/home/components/uploadpost.dart';
+import 'package:mobile/views/test/test.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);

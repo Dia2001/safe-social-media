@@ -5,7 +5,6 @@ import 'package:mobile/views/pages/login/login_page.dart';
 import 'package:mobile/views/pages/register/register_page.dart';
 import 'package:mobile/views/pages/home/home_page.dart';
 import 'package:mobile/views/pages/loading/loading_page.dart';
-import 'package:mobile/views/pages/home/components/uploadpost_form.dart';
 
 void main() {
   runApp(MyApp());

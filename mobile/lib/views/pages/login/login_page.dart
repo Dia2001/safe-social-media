@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'package:mobile/constant.dart';
 import 'package:mobile/utils/SharedPrefsUtil.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:mobile/services/auth_service.dart';
+import 'package:mobile/payload/request/auth_request.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -16,42 +13,19 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
+  final AuthService _authService = AuthService();
 
   Future<void> _login() async {
-    // final String apiUrl = "http://localhost:9999/api/v1/auth/login";
-    // print("hello");
-    final body = {
-      'email': _emailController.text.trim(),
-      'password': _passwordController.text.trim(),
-    };
-    final response = await http.post(Uri.parse(host + '/api/v1/auth/login'),
-        headers: {'Content-Type': 'application/json'}, body: json.encode(body));
-    print(response.statusCode);
-    if (response.statusCode == 200) {
-      Map<String, dynamic> data = json.decode(response.body);
-      SharedPrefsUtil.saveToken(data['token']);
-      // Nếu đăng nhập thành công, hiển thị thông báo tost
-      // Fluttertoast.showToast(
-      //   msg: "Đăng nhập thành công!",
-      //   toastLength: Toast.LENGTH_SHORT,
-      //   gravity: ToastGravity.BOTTOM,
-      //   timeInSecForIosWeb: 5,
-      //   backgroundColor: Colors.green,
-      //   textColor: Colors.white,
-      //   fontSize: 16.0,
-      // Đặt offset để hiển thị Toast bên trên bên dưới một tí
-      // Tính từ tâm của Toast
-      // Giá trị offset theo chiều dọc là số âm, càng nhỏ thì Toast càng lên cao
-      // Giá trị offset theo chiều ngang là số dương hoặc số âm đều được
-      // Ví dụ: offset: Offset(0.0, -50.0) sẽ đặt Toast bên trên bên dưới màn hình, cách mép dưới màn hình 50 điểm ảnh
-      // );
-      // Future.delayed(Duration(seconds: 10), () {
+    AuthRequest authRequest = AuthRequest(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim());
+    String? token = await _authService.login(authRequest);
+    if (token != null) {
+      SharedPrefsUtil.saveToken(token);
       Navigator.pushReplacementNamed(
         context,
         '/home',
       );
-      // Hành động cần thực hiện sau khi hàm dừng trong 2 giây
-      //});
     } else {
       throw Exception('Failed to login');
     }
