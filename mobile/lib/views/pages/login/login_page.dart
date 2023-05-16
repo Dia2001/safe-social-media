@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mobile/utils/SharedPrefsUtil.dart';
 import 'package:mobile/services/auth_service.dart';
 import 'package:mobile/payload/request/auth_request.dart';
+import 'package:mobile/views/dialog/custom_alert_dialog.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -27,8 +28,24 @@ class _LoginPageState extends State<LoginPage> {
         '/home',
       );
     } else {
-      throw Exception('Failed to login');
+      showLoginDialog(context, 'Đăng nhập thất bại',
+          'Vui lòng kiểm tra tài khoản hoặc mật khẩu');
+      // throw Exception('Failed to login');
     }
+  }
+
+  registerPage(BuildContext context) async {
+    Navigator.pushReplacementNamed(
+      context,
+      '/register',
+    );
+  }
+
+  void showLoginDialog(BuildContext context, String title, String text) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) =>
+            CustomAlertDialog(title: title, text: text));
   }
 
   @override
@@ -149,9 +166,7 @@ class _LoginPageState extends State<LoginPage> {
                     width: MediaQuery.of(context).size.width,
                     height: 50.0,
                     child: ElevatedButton(
-                      onPressed: () {
-                        print(_emailController);
-                      },
+                      onPressed: () => registerPage(context),
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(
                             Color.fromARGB(255, 33, 243, 103)),

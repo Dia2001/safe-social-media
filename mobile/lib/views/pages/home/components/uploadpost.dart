@@ -4,6 +4,10 @@ import 'dart:convert';
 import 'dart:html' as html;
 import 'package:mobile/payload/request/post_request.dart';
 import 'package:mobile/services/post_service.dart';
+import 'package:mobile/views/components/need_to_login.dart';
+import 'package:mobile/services/auth_service.dart';
+import 'package:mobile/utils/SharedPrefsUtil.dart';
+import 'package:mobile/payload/response/user_reponse.dart';
 
 class UploadImageForm extends StatefulWidget {
   @override
@@ -15,6 +19,25 @@ class _UploadImageFormState extends State<UploadImageForm> {
   String _inputText = '';
   List<int>? _selectedFile;
   Uint8List? _bytesData;
+  UserResponse? _user;
+  final AuthService _authService = AuthService();
+
+  @override
+  void initState() {
+    super.initState();
+    checkToken();
+  }
+
+  Future<void> checkToken() async {
+    if (await SharedPrefsUtil.hasToken()) {
+      UserResponse? user = await _authService.getUser();
+      if (user != null) {
+        setState(() {
+          _user = user;
+        });
+      }
+    }
+  }
 
   startWebFilePicker() async {
     html.FileUploadInputElement uploadInput = html.FileUploadInputElement();
@@ -39,7 +62,6 @@ class _UploadImageFormState extends State<UploadImageForm> {
   }
 
   Future<void> uploadImage(BuildContext context) async {
-    print("input text: " + _inputText);
     PostRequest postRequest = PostRequest(_selectedFile, _inputText);
     bool uploadCheck = await _postService.uploadPost(postRequest);
     if (uploadCheck) {
@@ -54,130 +76,134 @@ class _UploadImageFormState extends State<UploadImageForm> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: SizedBox(
-        width: double.infinity,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            _bytesData != null
-                ? Padding(
-                    padding: EdgeInsets.only(top: 20),
-                    child: Stack(
-                      children: [
-                        Container(
-                          width: 400,
-                          decoration: BoxDecoration(
-                            color: Colors.grey[300],
-                            borderRadius: BorderRadius.circular(10),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.3),
-                                blurRadius: 5,
-                                offset: Offset(0, 2),
+    return _user == null
+        ? NotLoggedInScreen()
+        : SingleChildScrollView(
+            child: SizedBox(
+              width: double.infinity,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  _bytesData != null
+                      ? Padding(
+                          padding: EdgeInsets.only(top: 20),
+                          child: Stack(
+                            children: [
+                              Container(
+                                width: 400,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[300],
+                                  borderRadius: BorderRadius.circular(10),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.3),
+                                      blurRadius: 5,
+                                      offset: Offset(0, 2),
+                                    ),
+                                  ],
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Image.memory(
+                                    _bytesData!,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
                               ),
+                              Positioned(
+                                  top: 0,
+                                  right: 0,
+                                  child: FloatingActionButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        _bytesData = null;
+                                      });
+                                    },
+                                    backgroundColor: Colors.red,
+                                    child: Icon(Icons.close),
+                                  )),
                             ],
                           ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Image.memory(
-                              _bytesData!,
-                              fit: BoxFit.cover,
+                        )
+                      : GestureDetector(
+                          onTap: () => startWebFilePicker(),
+                          child: Container(
+                            margin: const EdgeInsets.only(top: 32, bottom: 28),
+                            height: 277,
+                            width: 300,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: const Color.fromRGBO(217, 217, 217, 1),
+                                width: 2.0,
+                              ),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const [
+                                Icon(
+                                  Icons.add_a_photo_outlined,
+                                  size: 120,
+                                  color: Color.fromRGBO(217, 217, 217, 1),
+                                ),
+                                SizedBox(height: 16.0),
+                                Text(
+                                  "Tải ảnh lên",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Color.fromRGBO(217, 217, 217, 1),
+                                  ),
+                                )
+                              ],
                             ),
                           ),
                         ),
-                        Positioned(
-                            top: 0,
-                            right: 0,
-                            child: FloatingActionButton(
-                              onPressed: () {
-                                setState(() {
-                                  _bytesData = null;
-                                });
-                              },
-                              backgroundColor: Colors.red,
-                              child: Icon(Icons.close),
-                            )),
-                      ],
+                  Container(
+                    width: 400,
+                    margin: const EdgeInsets.only(top: 16, bottom: 18),
+                    child: TextField(
+                      onChanged: (value) {
+                        setState(() {
+                          _inputText = value;
+                        });
+                      },
+                      maxLines: 5,
+                      decoration: const InputDecoration(
+                        hintText: 'Bạn đang nghĩ gì ...',
+                        border: OutlineInputBorder(),
+                      ),
                     ),
-                  )
-                : GestureDetector(
-                    onTap: () => startWebFilePicker(),
-                    child: Container(
-                      margin: const EdgeInsets.only(top: 32, bottom: 28),
-                      height: 277,
-                      width: 300,
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: const Color.fromRGBO(217, 217, 217, 1),
-                          width: 2.0,
+                  ),
+                  Container(
+                    width: 250,
+                    height: 60,
+                    margin: const EdgeInsets.only(top: 16, bottom: 16),
+                    child: ElevatedButton(
+                      onPressed: () => uploadImage(context),
+                      style: ButtonStyle(
+                        shape: MaterialStateProperty.all(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(45.0),
+                          ),
+                        ),
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.green[400]),
+                        foregroundColor:
+                            MaterialStateProperty.all(Colors.white),
+                      ),
+                      child: const Text(
+                        "Đăng bài viết",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 21,
+                          color: Colors.white,
                         ),
                       ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Icon(
-                            Icons.add_a_photo_outlined,
-                            size: 120,
-                            color: Color.fromRGBO(217, 217, 217, 1),
-                          ),
-                          SizedBox(height: 16.0),
-                          Text(
-                            "Tải ảnh lên",
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Color.fromRGBO(217, 217, 217, 1),
-                            ),
-                          )
-                        ],
-                      ),
                     ),
                   ),
-            Container(
-              width: 400,
-              margin: const EdgeInsets.only(top: 16, bottom: 18),
-              child: TextField(
-                onChanged: (value) {
-                  setState(() {
-                    _inputText = value;
-                  });
-                },
-                maxLines: 5,
-                decoration: const InputDecoration(
-                  hintText: 'Bạn đang nghĩ gì ...',
-                  border: OutlineInputBorder(),
-                ),
+                ],
               ),
             ),
-            Container(
-              width: 250,
-              height: 60,
-              margin: const EdgeInsets.only(top: 16, bottom: 16),
-              child: ElevatedButton(
-                onPressed: () => uploadImage(context),
-                style: ButtonStyle(
-                  shape: MaterialStateProperty.all(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(45.0),
-                    ),
-                  ),
-                  backgroundColor: MaterialStateProperty.all(Colors.green[400]),
-                  foregroundColor: MaterialStateProperty.all(Colors.white),
-                ),
-                child: const Text(
-                  "Đăng bài viết",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 21,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+          );
   }
 }

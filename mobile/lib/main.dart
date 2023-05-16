@@ -5,6 +5,7 @@ import 'package:mobile/views/pages/login/login_page.dart';
 import 'package:mobile/views/pages/register/register_page.dart';
 import 'package:mobile/views/pages/home/home_page.dart';
 import 'package:mobile/views/pages/loading/loading_page.dart';
+import 'package:mobile/views/pages/home/components/profile_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -20,11 +21,11 @@ class MyApp extends StatelessWidget {
         initialRoute: '/',
         routes: {
           '/': (context) => LoadingScreen(),
-          //'/': (context) => UpPost(),
           '/login': (context) => LoginPage(),
+          '/register': (context) => RegisterPage(),
           '/home': (context) => HomePage(),
-        }
-        //home: HomePage(),
-        );
+        });
+    // home: Profile(),
+    // );
   }
 }

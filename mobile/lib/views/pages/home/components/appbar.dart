@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:mobile/payload/response/user_reponse.dart';
 
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final bool token;
+  // final bool checkToken;
+  final UserResponse? user;
   final void Function() onPressedNotification;
 
   const MyAppBar(
-      {Key? key, this.token = false, required this.onPressedNotification})
+      {Key? key,
+      // this.checkToken = false,
+      this.user,
+      required this.onPressedNotification})
       : super(key: key);
 
   @override
@@ -14,6 +19,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    String? a;
     return AppBar(
       backgroundColor: Colors.white,
       elevation: 1,
@@ -34,12 +40,14 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Visibility(
-                visible: token,
+                visible: user != null,
                 child: CircleAvatar(
                   radius: 18,
-                  backgroundImage: NetworkImage(
-                    'https://s.gravatar.com/avatar/05a27a463c7f36f30f35a76897d5e9ee?s=100&r=x&d=retro',
-                  ),
+                  backgroundImage: user?.avatar != null // user có thể là null
+                      ? NetworkImage(
+                          user!.avatar, // khẳng định user không phải là null
+                        )
+                      : NetworkImage(''),
                 ),
                 replacement: IconButton(
                   icon: Icon(Icons.account_circle),

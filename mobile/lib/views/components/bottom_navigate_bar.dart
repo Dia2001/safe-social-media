@@ -22,7 +22,7 @@ class BNavigationBar extends StatelessWidget {
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.add_circle_outline_outlined),
-          label: 'Discover',
+          label: 'Upload',
           backgroundColor: Colors.white,
         ),
         BottomNavigationBarItem(

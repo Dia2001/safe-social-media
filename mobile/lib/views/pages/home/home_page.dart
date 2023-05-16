@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/views/pages/register/register_page.dart';
 import 'package:mobile/services/post_service.dart';
-import 'package:mobile/models/post.dart';
-import 'package:mobile/utils/SharedPrefsUtil.dart';
+import 'package:mobile/payload/response/post_reponse.dart';
 import 'package:mobile/views/pages/home/components/appbar.dart';
 import 'package:mobile/views/pages/home/components/listpost.dart';
 import 'package:mobile/views/components/bottom_navigate_bar.dart';
 import 'package:mobile/views/pages/home/components/uploadpost.dart';
-import 'package:mobile/views/test/test.dart';
+import 'package:mobile/payload/response/user_reponse.dart';
+import 'package:mobile/services/auth_service.dart';
+import 'package:mobile/views/pages/home/components/profile_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -19,14 +20,15 @@ class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
 
   final PostService _postService = PostService();
-  List<Post> _posts = [];
-  bool _token = false;
+  final AuthService _authService = AuthService();
+  List<PostReponse> _posts = [];
+  UserResponse? _user;
 
   @override
   void initState() {
     super.initState();
     _loadPosts();
-    getToken();
+    checkToken();
   }
 
   void onTabTapped(int index) {
@@ -45,23 +47,30 @@ class _HomePageState extends State<HomePage> {
 
   final List<Widget> _children = [
     ListPost(posts: []),
-    ImageUploadScreen(),
     UploadImageForm(),
     RegisterPage(),
+    Profile(),
   ];
 
-  Future<void> getToken() async {
-    bool token = await SharedPrefsUtil.hasToken();
+  Future<void> checkToken() async {
+    UserResponse? user = await _authService.getUser();
+    print(user);
     setState(() {
-      _token = token;
+      _user = user;
     });
   }
+  // Future<void> checkToken() async {
+  //   bool checkToken = await SharedPrefsUtil.hasToken();
+  //   setState(() {
+  //     _checktoken = checkToken;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MyAppBar(
-        token: _token,
+        user: _user,
         onPressedNotification: () {},
       ),
       body: _children[_currentIndex],

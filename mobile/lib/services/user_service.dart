@@ -1,16 +1,16 @@
-import 'package:mobile/models/user.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:mobile/constant.dart';
 import 'package:mobile/payload/request/register_request.dart';
+import 'package:mobile/payload/response/user_reponse.dart';
 
 class UserService {
-  Future<User> fetchUser(String userId) async {
+  Future<UserResponse> fetchUser(String userId) async {
     final response =
         await http.get(Uri.parse(host + '/api/v1/users/' + userId));
 
     if (response.statusCode == 200) {
-      return User.fromJson(jsonDecode(response.body));
+      return UserResponse.fromJson(jsonDecode(response.body));
     } else {
       throw Exception('Failed to load user');
     }

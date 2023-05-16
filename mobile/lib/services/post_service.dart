@@ -5,14 +5,15 @@ import 'package:mobile/constant.dart';
 import 'package:mobile/payload/request/post_request.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:mobile/utils/SharedPrefsUtil.dart';
+import 'package:mobile/payload/response/post_reponse.dart';
 
 class PostService {
-  Future<List<Post>> fetchPosts() async {
+  Future<List<PostReponse>> fetchPosts() async {
     final response = await http.get(Uri.parse(host + '/home'));
     if (response.statusCode == 200) {
       final data = json.decode(response.body) as List<dynamic>;
-      //final posts = data.map((json) => Post.fromJson(json)).toList();
-      final posts = await Future.wait(data.map((json) => Post.fromJson(json)));
+      final posts =
+          await Future.wait(data.map((json) => PostReponse.fromJson(json)));
       return posts;
     } else {
       throw Exception('Failed to fetch post');

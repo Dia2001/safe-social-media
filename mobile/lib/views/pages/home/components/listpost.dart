@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/models/post.dart';
+import 'package:mobile/payload/response/post_reponse.dart';
 import 'package:mobile/utils/DurationUtil.dart';
 import 'package:mobile/constant.dart';
 
 class ListPost extends StatefulWidget {
-  final List<Post> posts;
+  final List<PostReponse> posts;
 
   ListPost({required this.posts});
 

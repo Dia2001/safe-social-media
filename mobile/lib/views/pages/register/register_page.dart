@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:mobile/services/user_service.dart';
+import 'package:mobile/payload/request/register_request.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -17,21 +18,17 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController _confimPasswordController = TextEditingController();
   TextEditingController _fullNameController = TextEditingController();
   TextEditingController _phoneNumberController = TextEditingController();
+  final UserService _userService = UserService();
 
   Future<void> _register() async {
-    final String apiUrl = "http://localhost:9999/api/v1/users";
-    print("hello");
-    final body = {
-      'email': _emailController.text.trim(),
-      'password': _passwordController.text.trim(),
-      'name': _fullNameController.text.trim(),
-      'phone': _phoneNumberController.text.trim()
-    };
-    final response = await http.post(Uri.parse(apiUrl),
-        headers: {'Content-Type': 'application/json'}, body: json.encode(body));
-    print(response.statusCode);
-    if (response.statusCode == 200) {
-      //Map<String, dynamic> data = json.decode(response.body);
+    RegisterRequest registerRequest = RegisterRequest(
+        name: _fullNameController.text.trim(),
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+        phone: _phoneNumberController.text.trim());
+
+    String? registerCheck = await _userService.register(registerRequest);
+    if (registerCheck != null) {
       Navigator.pushReplacementNamed(
         context,
         '/login',
