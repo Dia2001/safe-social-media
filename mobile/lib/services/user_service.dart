@@ -29,7 +29,7 @@ class UserService {
       Map<String, dynamic> data = json.decode(response.body);
       return data['token'];
     } else {
-      throw Exception('Failed to user register');
+      return null;
     }
   }
 }

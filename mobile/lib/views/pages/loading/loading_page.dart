@@ -11,7 +11,6 @@ class _LoadingScreenState extends State<LoadingScreen> {
   @override
   void initState() {
     super.initState();
-    // Gọi hàm để chờ 2 giây trước khi chuyển sang trang chủ
     Timer(Duration(seconds: 2),
         () => Navigator.pushReplacementNamed(context, '/home'));
   }
@@ -39,7 +38,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
               ),
             ),
             SizedBox(height: 20),
-            CircularProgressIndicator(), // hoặc LinearProgressIndicator()
+            CircularProgressIndicator(),
           ],
         ),
       ),

@@ -1,11 +1,8 @@
-// ignore_for_file: prefer_const_constructors, duplicate_ignore, unused_import
-
 import 'package:flutter/material.dart';
 import 'package:mobile/views/pages/login/login_page.dart';
 import 'package:mobile/views/pages/register/register_page.dart';
 import 'package:mobile/views/pages/home/home_page.dart';
 import 'package:mobile/views/pages/loading/loading_page.dart';
-import 'package:mobile/views/pages/home/components/profile_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -25,7 +22,5 @@ class MyApp extends StatelessWidget {
           '/register': (context) => RegisterPage(),
           '/home': (context) => HomePage(),
         });
-    // home: Profile(),
-    // );
   }
 }

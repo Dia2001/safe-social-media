@@ -18,7 +18,7 @@ class AuthService {
       Map<String, dynamic> data = json.decode(response.body);
       return data['token'];
     } else {
-      throw Exception('Failed to login');
+      return null;
     }
   }
 
@@ -26,7 +26,6 @@ class AuthService {
     Future<String?> tokenFuture = SharedPrefsUtil.getToken();
     String? token = await tokenFuture;
     token ??= '';
-    print(token + "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
     final headers = {
       'Content-Type': 'application/json',
       'x-access-token': token,

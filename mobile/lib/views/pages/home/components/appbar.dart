@@ -3,15 +3,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mobile/payload/response/user_reponse.dart';
 
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
-  // final bool checkToken;
   final UserResponse? user;
   final void Function() onPressedNotification;
 
-  const MyAppBar(
-      {Key? key,
-      // this.checkToken = false,
-      this.user,
-      required this.onPressedNotification})
+  const MyAppBar({Key? key, this.user, required this.onPressedNotification})
       : super(key: key);
 
   @override
@@ -19,7 +14,6 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    String? a;
     return AppBar(
       backgroundColor: Colors.white,
       elevation: 1,
