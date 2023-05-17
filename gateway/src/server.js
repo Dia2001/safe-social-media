@@ -3,6 +3,7 @@ const express = require("express");
 const http = require("http");
 const cors = require("cors");
 const Routes = require("./routes");
+const multer=require("multer");
 
 class Server {
   constructor() {

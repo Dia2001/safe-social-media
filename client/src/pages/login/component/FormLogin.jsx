@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { HiOutlineEyeOff as EyeOff, HiOutlineEye as Eye } from "react-icons/hi";
 import AuthService from "../../../services/AuthService";
+import { useNavigate } from "react-router-dom";
+import config from "../../../config";
 
 const FormLogin = () => {
   const [isShowPass, setIsShowPass] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const navigate = useNavigate();
   useEffect(() => {
     const keyDownHandler = (event) => {
       if (event.key === "Enter") {
@@ -23,10 +25,13 @@ const FormLogin = () => {
 
   const handleLogin = async (e) => {
     const result = await AuthService.login(email,password);
+    console.log(result);
     console.log(result.data.token)
     if (result) {
+      
       localStorage.setItem("token", result.data.token);
-      alert('login sucess')
+      alert('login sucess');
+      navigate(config.routes.home)
     } else {
       alert('Tên tài khoản hoặc mật khẩu không chính xác!')
     }

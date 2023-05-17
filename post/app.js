@@ -16,6 +16,10 @@ const port=process.env.PORT
 app.use(express.static('public'));
 app.use("/images", express.static("images"));
 
+//allow cors
+var cors = require('cors');
+app.use(cors());
+
 //configuaration multer
 const path=require('path')
 const multer=require("multer");
@@ -76,7 +80,6 @@ app.post("/post",auth, async (req, res)=>{
 
 //post with image and paragraph
 app.post('/post-article',auth,upload.single('image'),async (req, res) =>{
-    console.log("dô");
     try{
       //check if paragraph not null and less then 225 characters
       const paragraph = req.body.paragraph;

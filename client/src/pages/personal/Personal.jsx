@@ -1,24 +1,25 @@
 import React, { useEffect, useState } from "react";
-import Header from '../../components/Header'
 import PersonalHeader from "./components/PersonalHeader";
 import ListOfPost from "./components/ListOfPost";
-import Image from '../../assets/images/baner.jpg'
-import LargePost from "../../components/LargePost";
+import isAuthorize from "../../utils/isAuthorize";
+import Error from "../error/error";
+
 const Personal = () => {
-    const [listPost, setListPost] = useState([])
-    
-    useEffect(() => { 
-        const post={
-            image:Image
+    const [isAuth,SetAuth]=useState(false)
+    useEffect(
+        ()=>{
+        SetAuth(isAuthorize())    
         }
-        setListPost([post,post,post,post,post,post,post,post,post,post])
-    }, [])
+    )
     return <div className="relative">
         
+       {
+        isAuth?
         <div className="max-w-[760px] mx-auto mt-8 rounded-[6px] border border-Black25 p-4">
-            <PersonalHeader />
-            <ListOfPost list={listPost}/>
-        </div>
+            <PersonalHeader/>
+            <ListOfPost/>
+        </div>:<Error/>
+       }
        
     </div>;
 };

@@ -1,8 +1,10 @@
 import axios from "axios";
 import config from "../config";
 import { getToken, getHeaders } from "../utils";
+
 async function register(email, pass, name, phone) {
   console.log(email, pass, name, phone);
+
   try {
     await axios.post(`${config.BASE_API}/users`, {
       name: name,
@@ -10,7 +12,8 @@ async function register(email, pass, name, phone) {
       password: pass,
       phone: phone,
     });
-    alert("Registation user Successfully");
+    alert("Đăng ký thành công!");
+    
   } catch (err) {
     alert(err);
   }

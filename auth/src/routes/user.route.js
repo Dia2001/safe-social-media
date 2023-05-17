@@ -8,6 +8,11 @@ const jwt = require("jsonwebtoken");
 const dotenv = require('dotenv');
 dotenv.config();
 
+router.get("/:id",async (req,res) =>{
+  const user=await User.findById(req.params.id)
+  res.status(201).json(user)
+})
+
 router.post(
   "/",
   //validation

@@ -5,7 +5,24 @@ const authServiceProxy = httpProxy(process.env.AUTH_SERVICE_URL);
 const postServiceProxy = httpProxy(process.env.POST_SERVICE_URL);
 const express = require("express");
 const cors = require("cors");
+
 //       //configuaration multer
+const path=require('path')
+const multer=require("multer");
+const storage=multer.diskStorage({
+    destination:(req,file,cb)=>{
+        cb(null,"./public/images")
+    },
+    filename:(req,file,cb)=>{
+        console.log(file);
+        cb(null,Date.now()+path.extname(file.originalname))
+    }
+})
+const upload=multer({storage:storage})
+//for upload file
+
+
+
 // const path=require('path')
 // const multer=require("multer");
 // const storage=multer.diskStorage({
@@ -20,6 +37,7 @@ const cors = require("cors");
 // const upload=multer({storage:storage})
 
 class Routes {
+ 
   constructor(app) {
     this.app = app;
   }
@@ -49,11 +67,24 @@ class Routes {
     // this.app.post("/post-article",upload.single('image'),(req, res) => {
     //     postServiceProxy(req, res);
     // });
-
+    this.app.get("/api/v1/users/:id",(req, res) => {
+      authServiceProxy(req, res);
+    })
     this.app.get("/home", (req, res) => {
       postServiceProxy(req, res);
     });
 
+    this.app.get('/images/*',(req,res)=>{
+      postServiceProxy(req, res);
+      console.log("Load image!")
+    })
+
+    this.app.post('/post-article',upload.single('image'),(req,res)=>{
+      console.log(req.file);
+      console.log(req.body.paragraph);
+      postServiceProxy(req, res);
+    })
+    
   }
 
   routesConfig() {
