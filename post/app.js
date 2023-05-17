@@ -80,7 +80,6 @@ app.post("/post",auth, async (req, res)=>{
 
 //post with image and paragraph
 app.post('/post-article',auth,upload.single('image'),async (req, res) =>{
-    console.log("dô");
     try{
       //check if paragraph not null and less then 225 characters
       const paragraph = req.body.paragraph;
@@ -112,6 +111,7 @@ app.post('/post-article',auth,upload.single('image'),async (req, res) =>{
 })
 
 app.get("/home", (req, res) => {
+   console.log("get all");
    Post.find({}).then((posts)=>res.json(posts))
 })
 
