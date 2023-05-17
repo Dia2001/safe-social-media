@@ -27,6 +27,7 @@ router.get("/", authMiddleware, async (req, res) => {
 //@route POST api/auth
 //@desc  authentication and login route
 //@access Public
+
 router.post(
   "/login",
   //validation
