@@ -59,12 +59,6 @@ class _HomePageState extends State<HomePage> {
       _user = user;
     });
   }
-  // Future<void> checkToken() async {
-  //   bool checkToken = await SharedPrefsUtil.hasToken();
-  //   setState(() {
-  //     _checktoken = checkToken;
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
