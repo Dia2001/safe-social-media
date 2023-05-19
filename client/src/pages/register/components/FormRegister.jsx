@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { HiOutlineEyeOff as EyeOff, HiOutlineEye as Eye } from "react-icons/hi";
 import AuthService from "../../../services/AuthService";
+import { Await, useNavigate } from "react-router-dom";
+import config from "../../../config";
 const FormRegister = () => {
   const [isShowPass, setIsShowPass] = useState(false);
   const [email, setEmail] = useState("");
@@ -8,7 +10,7 @@ const FormRegister = () => {
   const [confPass, setConfpass] = useState("");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
-
+  const navigator=useNavigate();
   useEffect(() => {
     const keyDownHandler = (event) => {
       if (event.key === "Enter") {
@@ -25,6 +27,8 @@ const FormRegister = () => {
 
   const handleRegister = async (e) => {
     await AuthService.register(email, password, name, phone);
+    await navigator(config.routes.login);
+
   };
 
   return (
@@ -85,7 +89,7 @@ const FormRegister = () => {
           <input
             type="text"
             className="p-2x w-[95%] ml-2 rounded-md border shadow-md"
-            placeholder="Email *"
+            placeholder="Nhập email của bạn"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
@@ -94,7 +98,7 @@ const FormRegister = () => {
           <input
             type={`${isShowPass ? "text" : "password"}`}
             className="p-2x w-[95%] ml-2 rounded-md border shadow-md"
-            placeholder="Password"
+            placeholder="Nhập mật khẩu"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
@@ -114,9 +118,9 @@ const FormRegister = () => {
         </div>
         <div className="w-full py-2">
           <input
-            type="text"
+          type={`${isShowPass ? "text" : "password"}`}
             className="p-2x w-[95%] ml-2 rounded-md border shadow-md"
-            placeholder="Confim password"
+            placeholder="Nhập lại mật khẩu"
             value={confPass}
             onChange={(e) => setConfpass(e.target.value)}
           />
@@ -125,7 +129,7 @@ const FormRegister = () => {
           <input
             type="text"
             className="p-2x w-[95%] ml-2 rounded-md border shadow-md"
-            placeholder="Your first name"
+            placeholder="Nhập tên"
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
@@ -134,16 +138,16 @@ const FormRegister = () => {
           <input
             type="text"
             className="p-2x w-[95%] ml-2 rounded-md border shadow-md"
-            placeholder="Your mobile phone number"
+            placeholder="Nhập số điện thoại"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
           />
         </div>
         <button
           onClick={handleRegister}
-          className=" ml-2 w-[95%] px-2x py-4 bg-[#b0e9ff] hover:opacity-75 text-white font-bold rounded-md "
+          className=" ml-2 w-[95%] px-2x py-4 bg-WarningColor hover:opacity-75 text-white font-bold rounded-md "
         >
-          <h5>Continue</h5>
+          <h5>Đăng ký</h5>
         </button>
       </div>
     </div>
