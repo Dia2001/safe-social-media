@@ -17,7 +17,6 @@ const Post = ({post}) => {
           setImgApi('http://localhost:9999/images/'+post.image);
         }
         SetUser(userObject);
-        console.log(userObject)
       })();
     },[]
   )
@@ -36,10 +35,10 @@ const Post = ({post}) => {
    <BsThreeDots size={30} className="m-4"/>
     </div>
     {imgApi&&<img src={imgApi} className="max-w-[506px] object-cover max-h-[1050px] mx-auto" />}
-    <div className="h-[60px] my-6 max-w-[506px] mx-auto">
+    <div className="min-h-[60px] my-6 max-w-[506px] mx-auto break-all">
        {post.text}
     </div>
-    <hr className="border border-BlackCool/50"/>
+    <hr className="border border-BlackCool/10"/>
     <div className="flex gap-4 items-center p-8">
         <GrFavorite size={25}/>
         <h6>0</h6>

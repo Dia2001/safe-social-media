@@ -4,7 +4,7 @@ import { HiOutlinePencilSquare } from 'react-icons/hi2';
 import axios from 'axios';
 import LargePost from "../../../components/LargePost";
 import getCurrentUserId from "../../../utils/getCurrentUser";
-const ListOfPost = () => {
+const PersonalPost = () => {
   const [listOptions, SetListOptions] = useState(0)
   const [popUp, SetPopUp] = useState(false)
   const [isLoading, setIsLoading] = useState(true);
@@ -15,53 +15,40 @@ const ListOfPost = () => {
   const [postPopUp,setPostPopUp] = useState({});
   const [currrentPost, setCurrrentPost] = useState([]);
 
+
+  //using filter
   useEffect(() => {
     console.log('run....')
     //set loading when choose another option
     setIsLoading(true);
-    // const post={
-    //     image:Image
-    // }
-    // setListPost([post,post,post,post,post,post,post,post,post,post])
-
-    //get current user id
-    //get all posts of this user
+    
     const currentUserId = getCurrentUserId();
     if (currentUserId != null) {
       axios.get('http://localhost:9999/home/' + currentUserId).then(async (res) => {
         setListPost(res.data);
         console.log(res.data);
-        return res;
-      }).then((res) => {
-        var listTmp = [];
-      //filter with image
-      res.data.forEach((post) => {
-        if (post.hasOwnProperty('image')) {
-          listTmp.push(post);
-        }
-      })
-      setPostArticles(listTmp);
-      console.log(postArticles);
-     setCurrrentPost(postArticles);
-      return res;
-      }).then((res) => {
-        var listTmp = [];
-      //filter without image
-      res.data.forEach((post) => {
-        if (!post.hasOwnProperty('image')) {
-          listTmp.push(post);
-        }
-      })
-      setStatusArticles(listTmp);
-      console.log(statusArticles);
-      setIsLoading(false);
-      }).catch((err) => {
-        console.log(err);
+       
       })
     }
-
-
   },[])
+
+  useEffect(
+    ()=>{
+      //filter post
+     console.log("load post ");
+     const postArticlesTmp=listPost.filter(res=>res.hasOwnProperty('image'));
+     setPostArticles(postArticlesTmp);
+     console.log(postArticles);
+     //filter status
+     const loadStatusTmp=listPost.filter(res=>!res.hasOwnProperty('image'));
+     setStatusArticles(loadStatusTmp);
+     console.log(statusArticles);
+    //set current post
+    setCurrrentPost(postArticles);
+    setIsLoading(false);
+    }
+    ,[listPost])
+
 
     useEffect(()=>{
       console.log(listOptions);
@@ -146,4 +133,4 @@ const ListOfPost = () => {
 
   </div>)
 };
-export default ListOfPost;
+export default PersonalPost;

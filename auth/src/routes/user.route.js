@@ -6,12 +6,47 @@ const gravatar = require("gravatar");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const dotenv = require('dotenv');
+
 dotenv.config();
 
-router.get("/:id",async (req,res) =>{
-  const user=await User.findById(req.params.id)
+router.get("/:id", async (req, res) => {
+  const user = await User.findById(req.params.id)
   res.status(201).json(user)
 })
+
+//update user's data
+// router.put('/:id',async (req,res) =>{
+//   try{
+//     let dataUpdate= {phone:req.body.phone,name:req.body.name};
+//     const newUser=await User.findByIdAndUpdate(req.params.id,dataUpdate);
+//     console.log('hello');
+//       const updateUser= newUser.save();
+//       res.status(200).json(updateUser);
+//     }catch(e){
+//       res.status(400).send("Fault to update")
+//     }
+
+// })
+
+router.put('/:id', async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (req.body.name != '')
+      user.name = await req.body.name;
+    
+    if (req.body.phone != '' ) {
+      user.phone = await req.body.phone;
+    }
+    await user.save();
+    res.status(200).json(user);
+  } catch (e) {
+    console.log(e);
+    res.status(400).send("Fault to update!")
+  }
+
+}
+);
+
 
 router.post(
   "/",
@@ -36,7 +71,7 @@ router.post(
     }
     console.log(":))")
     //request, response
-    const { name, email, password,phone} = req.body;
+    const { name, email, password, phone } = req.body;
     try {
       //see if user already exists
       let user = await User.findOne({ email });
@@ -52,8 +87,8 @@ router.post(
       //   r: "pg",
       //   d: "mm",
       // });
-      const avatar= gravatar.url(email ,  {s: '100', r: 'x', d: 'retro'}, true)
-      user = new User({ name, email, password, avatar ,phone});
+      const avatar = gravatar.url(email, { s: '100', r: 'x', d: 'retro' }, true)
+      user = new User({ name, email, password, avatar, phone });
 
       //encrypt password
       const salt = await bcrypt.genSalt(10);

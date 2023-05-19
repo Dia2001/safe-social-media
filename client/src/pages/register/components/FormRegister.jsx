@@ -10,7 +10,25 @@ const FormRegister = () => {
   const [confPass, setConfpass] = useState("");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
-  const navigator=useNavigate();
+  const navigator = useNavigate();
+
+  //validate 
+  const validatedPass = () => {
+    if (password == '') {
+      alert("Không được bỏ trống ô mật khẩu");
+      return false;
+    }
+    if (password!=confPass) {
+      alert("Mật khẩu không khớp!");
+      return false;
+    }
+    return true;
+  }
+  //validate number
+  function isNumeric(n) {
+    return !isNaN(parseFloat(n)) && isFinite(n);
+  }
+
   useEffect(() => {
     const keyDownHandler = (event) => {
       if (event.key === "Enter") {
@@ -26,8 +44,22 @@ const FormRegister = () => {
   }, [password]);
 
   const handleRegister = async (e) => {
-    await AuthService.register(email, password, name, phone);
-    await navigator(config.routes.login);
+    if (email == '') {
+      alert('Không được bỏ trống ô tài khoản!');
+      return;
+    }
+    if (name == '') {
+      alert('Không được bỏ trống ô tên');
+      return;
+    }
+    if (!isNumeric(phone)) {
+      alert('Hãy nhập đúng số trong ô điện thoại');
+      return;
+    }
+    if (validatedPass()) {
+      await AuthService.register(email, password, name, phone);
+      navigator(config.routes.login);
+    }
 
   };
 
@@ -101,6 +133,7 @@ const FormRegister = () => {
             placeholder="Nhập mật khẩu"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+
           />
           {isShowPass ? (
             <EyeOff
@@ -118,11 +151,12 @@ const FormRegister = () => {
         </div>
         <div className="w-full py-2">
           <input
-          type={`${isShowPass ? "text" : "password"}`}
+            type={`${isShowPass ? "text" : "password"}`}
             className="p-2x w-[95%] ml-2 rounded-md border shadow-md"
             placeholder="Nhập lại mật khẩu"
             value={confPass}
             onChange={(e) => setConfpass(e.target.value)}
+
           />
         </div>
         <div className="w-full py-2">
@@ -132,6 +166,7 @@ const FormRegister = () => {
             placeholder="Nhập tên"
             value={name}
             onChange={(e) => setName(e.target.value)}
+
           />
         </div>
         <div className="w-full py-2">
