@@ -5,20 +5,21 @@ import Header from "../../components/Header";
 import ListPosts from "./components/ListPosts";
 import UpPost from "../../components/UpPost";
 import axios from "axios";
+import config from "../../config";
 
 const Home = () => {
     
     const [listPosts, setListPosts] = useState([]);
     const [popUp, SetPopUp] = useState(false);
     useEffect( () => {
-        const getAllPost=axios.get('http://localhost:9999/home').then((response) => 
+        const getAllPost=axios.get(`${config.BASE_API_V1}/home`).then((response) => 
         {
             if(response.status===200)
                 setListPosts(response.data);
             else
             console.log("Loi!!!");
         });
-    })
+    },[])
 
     function PopUpHandler() { SetPopUp(!popUp) }
 

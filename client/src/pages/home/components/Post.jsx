@@ -6,9 +6,28 @@ import {CgComment} from "react-icons/cg"
 import Avatar from '../../../assets/images/anhdaidien.jpeg'
 import getUser from "../../../utils/getUser";
 import axios from "axios";
+
+const getTimeAgo = (timestamp) => {
+  const currentTimestamp = Date.now();
+  const timeDiff = currentTimestamp - timestamp;
+
+  if (timeDiff < 60000) { // 1 phút = 60,000 milliseconds
+    return 'Vừa xong';
+  } else if (timeDiff < 3600000) { // 1 giờ = 3,600,000 milliseconds
+    const minutes = Math.floor(timeDiff / 60000);
+    return `${minutes} phút trước`;
+  } else if (timeDiff < 86400000) { // 1 ngày = 86,400,000 milliseconds
+    const hours = Math.floor(timeDiff / 3600000);
+    return `${hours} giờ trước`;
+  } else {
+    const days = Math.floor(timeDiff / 86400000);
+    return `${days} ngày trước`;
+  }
+};
 const Post = ({post}) => {
   const [user,SetUser]=useState({});
   const [imgApi,setImgApi] = useState(null);
+  const formattedTime = getTimeAgo(new Date(post.date).getTime());
   useEffect(
     ()=>{
       (async ()=>{
@@ -21,6 +40,8 @@ const Post = ({post}) => {
       })();
     },[]
   )
+
+
   return <div className="max-w-[750px] mx-auto rounded-[12px] shadow-md">
     <div className="flex justify-between mt-6 items-start">
     <div className="flex gap-2 items-center">
@@ -29,7 +50,7 @@ const Post = ({post}) => {
         <h6>{user.name}</h6>
        <div className="flex gap-2 items-end"> 
         <AiOutlineGlobal/>
-        <h6>4 giờ trước</h6>
+        <h6>{formattedTime}</h6>
        </div>
     </div>
     </div>
