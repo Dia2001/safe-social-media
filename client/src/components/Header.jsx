@@ -4,20 +4,41 @@ import { BiMessageSquare } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import config from "../config";
 import isAuthorize from "../utils/isAuthorize";
+import getUser from "../utils/getUser";
+import getCurrentUserId from "../utils/getCurrentUser";
+import Logout from "../utils/logout";
 
 const Header = () => {
   const [auth, SetAuth] = useState(false)
+  const [user,SetUser] = useState('');
   useEffect(
     () => {
+      
       var isAuth=isAuthorize();
       console.log(isAuth);
       SetAuth(isAuth);
+      if(isAuth){
+        (async()=>{
+          const getNameUser=await getUser(getCurrentUserId());
+          SetUser(getNameUser.name);
+      })();
+      }
     }, []
   )
+
+  const logout=()=>{
+    if(Logout()){
+      alert("Đăng xuất thành công");
+      window.location.reload(true);
+    }
+    else
+      alert("Đăng xuất không thành công");
+  }
+
   return (
     <header className="sticky top-0 z-50 opacity-80 flex bg-white justify-between items-center border-b-2">
       <div className="w-auto flex items-center">
-        <Link to={config.routes.home}>
+        <a href={config.routes.home}>
           <svg
             width="194"
             height="78"
@@ -103,7 +124,7 @@ const Header = () => {
               </linearGradient>
             </defs>
           </svg>
-        </Link>
+        </a>
       </div>
       <div className=" search m-2x flex gap-2 items-center">
         <input
@@ -117,7 +138,7 @@ const Header = () => {
         </button>
       </div>
       {auth ? (<div className="flex items-center  m-2x cursor-pointer">
-        <h6 className="font-bold">Nguyen Van Dia</h6>
+        <h6 className="font-bold">{user}</h6>
         <div className="relative !z-10 ml-1">
           <Link to={config.routes.personal}>
             <img
@@ -127,6 +148,7 @@ const Header = () => {
             />
           </Link>
         </div>
+        <button className="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center m-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900" onClick={logout}>Đăng xuất</button>
         <button className="ml-1 p-1x text-center">
           <BiMessageSquare className="ml-1.5" size={17} />
         </button>

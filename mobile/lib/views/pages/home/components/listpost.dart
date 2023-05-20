@@ -51,11 +51,12 @@ class _MyListViewState extends State<ListPost> {
               ),
               SizedBox(
                   width: 400,
-                  child: Image.network(
-                    // postImg + post.image,
-                    hostImg + post.image,
-                    fit: BoxFit.cover,
-                  )),
+                  child: post.image != null
+                      ? Image.network(
+                          hostImg + post.image!,
+                          fit: BoxFit.cover,
+                        )
+                      : SizedBox()),
               SizedBox(height: 10),
               Padding(
                 padding: EdgeInsets.fromLTRB(21.0, 0, 21.0, 15.0),

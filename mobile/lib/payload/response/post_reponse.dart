@@ -4,7 +4,7 @@ class PostReponse {
   final String id;
   final String user;
   final String text;
-  final String image;
+  final String? image;
   final DateTime date;
   String nameUser;
   String avatarUser;
@@ -13,7 +13,7 @@ class PostReponse {
     required this.id,
     required this.user,
     required this.text,
-    required this.image,
+    this.image,
     required this.date,
     this.nameUser = '',
     this.avatarUser = '',

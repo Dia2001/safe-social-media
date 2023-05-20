@@ -24,15 +24,20 @@ const FormLogin = () => {
   }, [password]);
 
   const handleLogin = async (e) => {
+    if(email==''&&password=='')
+    {
+      alert("Hãy nhập đầy đủ thông tin");
+      return;
+    }
     const result = await AuthService.login(email,password);
     console.log(result);
     console.log(result.data.token)
     if (result) {
-      
       localStorage.setItem("token", result.data.token);
       window.location.reload(true);
       alert('login sucess');
       navigate(config.routes.home)
+      window.location.reload(true);
     } else {
       alert('Tên tài khoản hoặc mật khẩu không chính xác!')
     }
@@ -105,7 +110,7 @@ const FormLogin = () => {
           <input
             type={`${isShowPass ? "text" : "password"}`}
             className="p-2x w-[95%] ml-2 rounded-md border shadow-md"
-            placeholder="Password"
+            placeholder="Nhập mật khẩu *"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />

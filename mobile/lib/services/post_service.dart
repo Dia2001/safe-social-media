@@ -9,11 +9,15 @@ import 'package:mobile/payload/response/post_reponse.dart';
 
 class PostService {
   Future<List<PostReponse>> fetchPosts() async {
+    print("dô");
     final response = await http.get(Uri.parse(host + '/home'));
+    print("haha" + response.statusCode.toString());
     if (response.statusCode == 200) {
       final data = json.decode(response.body) as List<dynamic>;
       final posts =
           await Future.wait(data.map((json) => PostReponse.fromJson(json)));
+      print("mmm");
+      print(posts);
       return posts;
     } else {
       throw Exception('Failed to fetch post');

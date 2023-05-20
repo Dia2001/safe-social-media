@@ -120,7 +120,7 @@ app.get("/home/:id",async (req, res) => {
     
     //find user by id_user
     try{
-        const user=await axios.get(`http://localhost:3040/user/${req.params.id}`)
+        const user=await axios.get(`http://localhost:9999/api/v1/users/${req.params.id}`)
         if(user!==null){
             const postsOfUser=await Post.where({user:user.data._id})
             res.status(201).json(postsOfUser)

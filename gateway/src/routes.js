@@ -74,10 +74,19 @@ class Routes {
     this.app.get("/api/v1/users/:id",(req, res) => {
       authServiceProxy(req, res);
     })
+    
+    this.app.put("/api/v1/users/:id",(req, res) => {
+      authServiceProxy(req, res);
+    })
+
     this.app.get("/home", (req, res) => {
       console.log("hello");
       postServiceProxy(req, res);
     });
+    this.app.get("/home/:id", (req, res) => {
+      postServiceProxy(req, res);
+    });
+
 
     this.app.get('/images/*',(req,res)=>{
       postServiceProxy(req, res);
