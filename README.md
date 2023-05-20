@@ -100,3 +100,6 @@ user: {
   ],
   date: { type: Date, default: Date.now },
 ```
+![1683858192446](https://github.com/Dia2001/architecture-microservice/assets/88370983/97e7a0fe-cdbe-41cf-89b4-1c5eb375ee1e)
+
+
