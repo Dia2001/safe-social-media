@@ -3,7 +3,6 @@ import {BsThreeDots} from "react-icons/bs"
 import {AiOutlineGlobal} from "react-icons/ai"
 import {GrFavorite} from "react-icons/gr"
 import {CgComment} from "react-icons/cg"
-import Avatar from '../../../assets/images/anhdaidien.jpeg'
 import getUser from "../../../utils/getUser";
 import axios from "axios";
 
@@ -44,9 +43,9 @@ const Post = ({post}) => {
   return <div className="max-w-[750px] mx-auto rounded-[12px] shadow-md">
     <div className="flex justify-between mt-6 items-start">
     <div className="flex gap-2 items-center">
-    <img src={Avatar} className="h-[76px] w-[76px] rounded-full m-2x"/> 
+    <img src={user.avatar} className="h-[76px] w-[76px] object-cover rounded-full m-2x"/> 
     <div>
-        <h6>{user.name}</h6>
+        <h6 className="font-semibold">{user.name}</h6>
        <div className="flex gap-2 items-end"> 
         <AiOutlineGlobal/>
         <h6>{formattedTime}</h6>
@@ -56,8 +55,8 @@ const Post = ({post}) => {
    <BsThreeDots size={30} className="m-4"/>
     </div>
     {imgApi&&<img src={imgApi} className="max-w-[506px] object-cover max-h-[1050px] mx-auto" />}
-    <div className="min-h-[60px] my-6 max-w-[506px] mx-auto break-all">
-       {post.text}
+    <div className="min-h-[60px] my-6 max-w-[506px] mx-auto break-all text-justify text-center whitespace-normal" style={{ wordBreak: 'keep-all', whiteSpace: 'pre-line' }}>
+     {post.text}
     </div>
     <hr className="border border-BlackCool/10"/>
     <div className="flex gap-4 items-center p-8">

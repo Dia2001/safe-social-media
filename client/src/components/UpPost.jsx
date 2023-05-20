@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Avatar from '../assets/images/anhdaidien.jpeg'
 import { MdOutlineClose } from 'react-icons/md';
 import axios from "axios";
 import ImagePlaceholder from '../assets/images/image-placeholder.png';
@@ -10,6 +9,7 @@ import getCurrentUserId from "../utils/getCurrentUser";
 const UpPost = ({ openPost }) => {
     const [auth, SetAuth] = useState(false)
     const [user, SetUser] = useState('');
+    const [avatar,SetAvatar]=useState('');
     useEffect(() => {
 
         var isAuth = isAuthorize();
@@ -19,6 +19,7 @@ const UpPost = ({ openPost }) => {
             (async () => {
                 const getNameUser = await getUser(getCurrentUserId());
                 SetUser(getNameUser.name);
+                SetAvatar(getNameUser.avatar);
             })()
         }
     }, [])
@@ -75,7 +76,7 @@ const UpPost = ({ openPost }) => {
         <div className="sticky top-[90px] mx-auto bg-white w-[650px] min-h-[600px] rounded-md overflow-hidden shadow-md z-50">
             <div className="flex justify-between p-4">
                 <div className="flex gap-4">
-                    <img src={Avatar} className="shadow-sm w-[76px] h-[76px] rounded-full" />
+                    <img src={avatar} className="shadow-sm w-[76px] h-[76px] rounded-full" />
                     <div>
                         <h5>{user}</h5>
                         <div className="flex gap-2 items-center">

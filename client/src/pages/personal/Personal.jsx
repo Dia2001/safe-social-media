@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import PersonalHeader from "./components/PersonalHeader";
-import ListOfPost from "./components/ListOfPost";
 import isAuthorize from "../../utils/isAuthorize";
 import Error from "../error/error";
 import PersonalPost from "./components/PersonalPost";

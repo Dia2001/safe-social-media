@@ -3,9 +3,13 @@ import isAuthorize from "../../utils/isAuthorize";
 import Error from "../error/error";
 import getCurrentUserId from "../../utils/getCurrentUser";
 import getUser from "../../utils/getUser";
-import Avatar from '../../assets/images/anhdaidien.jpeg';
 import axios from "axios";
+import moment from 'moment';
 
+const convertDate=(datetime)=>{
+  const formattedDate = moment(datetime).format("DD-MM-YYYY");
+  return formattedDate;
+}
 const Profile = () => {
 
   const [auth, SetAuth] = useState(isAuthorize());
@@ -68,10 +72,10 @@ const Profile = () => {
     {auth ? <div className="mx-auto mt-[48px] p-4 border border-BlackCool/5 w-[750px] h-[369px] rounded-sm shadow-md bg-white">
       <h5>Thông tin cá nhân</h5>
       <div className="flex gap-4">
-        <img src={Avatar} className="w-[80px] h-[80px] rounded-full shadow-sm" />
+        <img src={user.avatar} className="w-[80px] h-[80px] rounded-full shadow-sm" />
         <div>
           <h6 className="font-bold">{user.name}</h6>
-          <h6>Ngày tạo {user.date}</h6>
+          <h6>Ngày tạo {convertDate(user.date)}</h6>
         </div>
       </div>
       <hr className="border-2 my-4 border-BlackCool/5" />

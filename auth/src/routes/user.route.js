@@ -62,13 +62,24 @@ router.post(
           .json({ errors: [{ message: "user already exists" }] });
       }
 
-      //get user gravatar
-      // const avatar = gravatar.url(email, {
-      //   s: "200",
-      //   r: "pg",
-      //   d: "mm",
-      // });
-      const avatar = gravatar.url(email, { s: '100', r: 'x', d: 'retro' }, true)
+      if(email==="nguyenvandiatlvn3@gmail.com"){
+        avatar=process.env.Dia;
+      }else if(email==="doanvansang@gmail.com"){
+        avatar=process.env.SANG;
+      }else if(email==="nguyenthithuydiem@gmail.com"){
+        avatar=process.env.DIEM;
+      }else if(email==="phamthaoquyen@gmail.com"){
+        avatar=process.env.QUYEN;
+      }else if(email==="nguyenhuunhan@gmail.com"){
+        avatar=process.env.NHAN;
+      }else if(email==="nguyenvuquyettien@gmail.com"){
+        avatar=process.env.TIEN;
+      }else if(email==="phamdinhtho@gmail.com"){
+        avatar=process.env.THO;
+      }else{
+        avatar="";
+      }
+      // const avatar = gravatar.url(email, { s: '100', r: 'x', d: 'retro' }, true)
       user = new User({ name, email, password, avatar, phone });
 
       //encrypt password

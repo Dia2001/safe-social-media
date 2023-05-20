@@ -8,6 +8,7 @@ const authRouter = require("./routes/auth.route");
 const dotenv = require('dotenv');
 dotenv.config();
 console.log(process.env.mongoURI)
+
 // var corsOptions = {
 //   origin: "http://localhost:3000",
 // };

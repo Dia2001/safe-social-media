@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Avatar from '../../../assets/images/anhdaidien.jpeg'
 import {AiOutlineCamera} from "react-icons/ai"
 import getUser from "../../../utils/getUser";
 import getCurrentUserId from "../../../utils/getCurrentUser";
@@ -10,6 +9,7 @@ import axios from "axios";
 
 const PersonalHeader = () => {
     const [user,SetUser]=useState('');
+    const [avatar,SetAvatar]=useState('');
     const [countArticle,setCountArticle]=useState(0);
 
     useEffect(
@@ -17,6 +17,7 @@ const PersonalHeader = () => {
         (async()=>{
             const getNameUser=await getUser(getCurrentUserId());
             SetUser(getNameUser.name);
+            SetAvatar(getNameUser.avatar);
             const getPostOfUser=(await axios.get('http://localhost:9999/home/'+getCurrentUserId())).data;
             setCountArticle(getPostOfUser.length);
             
@@ -26,7 +27,7 @@ const PersonalHeader = () => {
     )
   return <div className="flex gap-4">
     <div className="relative p-4">
-        <img src={Avatar} className="w-[156px] h-[156px] rounded-full object-cover"/>
+        <img src={avatar} className="w-[156px] h-[156px] rounded-full object-cover"/>
         <AiOutlineCamera size={25} className="absolute right-2 bottom-2 p-1 h-fit rounded-full w-fit bg-Black25"/>
     </div>
     <div className="flex flex-col justify-center gap-8 ">

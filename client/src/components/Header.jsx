@@ -11,6 +11,7 @@ import Logout from "../utils/logout";
 const Header = () => {
   const [auth, SetAuth] = useState(false)
   const [user,SetUser] = useState('');
+  const [avatar,SetAvatar]=useState('');
   useEffect(
     () => {
       
@@ -19,8 +20,10 @@ const Header = () => {
       SetAuth(isAuth);
       if(isAuth){
         (async()=>{
+          console.log("hello");
           const getNameUser=await getUser(getCurrentUserId());
           SetUser(getNameUser.name);
+          SetAvatar(getNameUser.avatar);
       })();
       }
     }, []
@@ -142,7 +145,7 @@ const Header = () => {
         <div className="relative !z-10 ml-1">
           <Link to={config.routes.personal}>
             <img
-              src="https://source.unsplash.com/100x100/?portrait"
+              src={avatar}
               className="relative avt h-[40px] w-[40px] rounded-full hover:shadow-md z-20"
               alt="Avatar"
             />
