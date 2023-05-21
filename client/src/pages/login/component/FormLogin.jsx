@@ -6,13 +6,14 @@ import config from "../../../config";
 
 const FormLogin = () => {
   const [isShowPass, setIsShowPass] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [values, setValues] = useState({email: "",password: "",});
+  const [errors, setErrors] = useState({email: "",password: "",});
+
   const navigate = useNavigate();
   useEffect(() => {
     const keyDownHandler = (event) => {
       if (event.key === "Enter") {
-        event.preventDefault();
+        event.preventDefault(event);
         handleLogin();
       }
     };
@@ -21,15 +22,65 @@ const FormLogin = () => {
     return () => {
       document.removeEventListener("keydown", keyDownHandler);
     };
-  }, [password]);
+  }, [values.password]);
+
+
+  const handleOnChange = (event) => {
+    const { name, value } = event.target;
+    const newValue = { ...values, [name]: value };
+    const newError = { ...errors };
+
+    // Validate whitespace
+    if (value.trim() === '') {
+      newError[name] = 'Các trường không được để trống';
+    } else {
+      newError[name] = '';
+    }
+
+    // Validate Email
+    if (name === 'email') {
+      const re =
+        /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+      if (!re.test(String(value).toLowerCase())) {
+        newError[name] = 'Vui lòng nhập đúng định dạng gmail';
+      }
+    }
+
+    // Validate Pasword
+    if (name === 'password') {
+      if (value.length <= 5) {
+        newError[name] = 'Mật khẩu phải có ít nhất 6  ký tự!';
+      } else {
+        newError[name] = '';
+      }
+    }
+
+    // Set state
+    setValues(newValue);
+    setErrors(newError);
+  };
 
   const handleLogin = async (e) => {
-    if(email==''&&password=='')
-    {
-      alert("Hãy nhập đầy đủ thông tin");
+    const valuesAll=values;
+    const errorsAll=errors;
+    let flag = true;
+    //check empty inputs
+    for (let key in valuesAll) {
+      if (values[key].trim() === "") {
+        flag = false;
+      }
+    }
+    //check errors
+    for (let key in errorsAll) {
+      if (errorsAll[key] !== "") {
+        flag = false;
+      }
+    }
+    if(!flag){
+      alert("Dữ liệu không hợp lệ");
       return;
     }
-    const result = await AuthService.login(email,password);
+    const result = await AuthService.login(values.email,values.password);
     console.log(result);
     console.log(result.data.token)
     if (result) {
@@ -43,7 +94,8 @@ const FormLogin = () => {
     }
   };
 
-  return (
+
+return (
     <div className="h-[88vh] w-[425px] bg-white  z-20  col-span-1">
       <div className="w-[80%] bg-white  ml-9 mt-3">
         <div className="w-[10%] ml-36  mt-20">
@@ -99,20 +151,24 @@ const FormLogin = () => {
 
         <div className="w-full py-2">
           <input
+            onChange={handleOnChange}
             type="text"
             className="p-2x w-[95%] ml-2 rounded-md border shadow-md"
             placeholder="Email *"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            name="email"
+            value={values.email || ''}
           />
+          <span class="text-red-500 font-sans ml-3"> {errors.email}</span>
         </div>
-        <div className="relative w-full py-2">
+        <div className="w-full py-2">
+          <div className="relative">
           <input
             type={`${isShowPass ? "text" : "password"}`}
             className="p-2x w-[95%] ml-2 rounded-md border shadow-md"
             placeholder="Nhập mật khẩu *"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={values.password || ''}
+            name="password"
+            onChange={handleOnChange}
           />
           {!isShowPass ? (
             <EyeOff
@@ -127,6 +183,9 @@ const FormLogin = () => {
               size={35}
             />
           )}
+
+          </div>
+           <span class="text-red-500 font-sans ml-3"> {errors.password}</span>
         </div>
         <div className="w-full flex ml-4 py-2">
           <label className="flex gap-1 ">
@@ -135,7 +194,9 @@ const FormLogin = () => {
           </label>
         </div>
         <button
-          onClick={handleLogin}
+          onClick={(e) => {
+            handleLogin(e)
+          }}
           className=" ml-2 w-[95%] px-2x py-4 bg-[#b0e9ff] hover:opacity-75 text-white font-bold rounded-md "
         >
           <h5>Đăng nhập</h5>

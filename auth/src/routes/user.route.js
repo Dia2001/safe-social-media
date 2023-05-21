@@ -77,7 +77,7 @@ router.post(
       }else if(email==="phamdinhtho@gmail.com"){
         avatar=process.env.THO;
       }else{
-        avatar="";
+        avatar=process.env.OTHER;
       }
       // const avatar = gravatar.url(email, { s: '100', r: 'x', d: 'retro' }, true)
       user = new User({ name, email, password, avatar, phone });

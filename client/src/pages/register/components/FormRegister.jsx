@@ -5,35 +5,16 @@ import { Await, useNavigate } from "react-router-dom";
 import config from "../../../config";
 const FormRegister = () => {
   const [isShowPass, setIsShowPass] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confPass, setConfpass] = useState("");
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
+  const [values, setValues] = useState({email: "",password: "",confPass:"",name:"",phone:""});
+  const [errors, setErrors] = useState({email: "",password: "",confPass:"",name:"",phone:""});
   const navigator = useNavigate();
 
-  //validate 
-  const validatedPass = () => {
-    if (password == '') {
-      alert("Không được bỏ trống ô mật khẩu");
-      return false;
-    }
-    if (password!=confPass) {
-      alert("Mật khẩu không khớp!");
-      return false;
-    }
-    return true;
-  }
-  //validate number
-  function isNumeric(n) {
-    return !isNaN(parseFloat(n)) && isFinite(n);
-  }
 
   useEffect(() => {
     const keyDownHandler = (event) => {
       if (event.key === "Enter") {
         event.preventDefault();
-        handleRegister();
+        handleRegister(event);
       }
     };
     document.addEventListener("keydown", keyDownHandler);
@@ -41,26 +22,100 @@ const FormRegister = () => {
     return () => {
       document.removeEventListener("keydown", keyDownHandler);
     };
-  }, [password]);
+  }, [values.password]);
+
+
+  const handleOnChange = (event) => {
+    const { name, value } = event.target;
+    const newValue = { ...values, [name]: value };
+    const newError = { ...errors };
+
+    // Validate whitespace
+    if (value.trim() === '') {
+      newError[name] = 'Các trường không được để trống';
+    } else {
+      newError[name] = '';
+    }
+
+    // Validate Email
+    if (name === 'email') {
+      const re =
+        /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+      if (!re.test(String(value).toLowerCase())) {
+        newError[name] = 'Vui lòng nhập đúng định dạng gmail';
+      }
+    }
+
+    // Validate Pasword
+    if (name === 'password') {
+      if (value.length <= 5) {
+        newError[name] = 'Mật khẩu phải có ít nhất 6  ký tự!';
+      } else {
+        newError[name] = '';
+      }
+    }
+
+    //Validate Confim Passord 
+    if(name==='confPass'){
+        if(values.password===""){
+          newError[name] = 'Vui lòng nhập mật khẩu';
+        }else if(value.trim()===""){
+          newError[name] = 'Vui lòng nhập lại mật khẩu';
+        }else if(value.length <= 5){
+          newError[name] = 'Mật khẩu phải có ít nhất 6  ký tự!';
+        }else if(values.password!==value){
+          newError[name] = 'Mật khẩu nhập lại không khớp';
+        }else{
+          newError[name] = '';
+        }
+    }
+
+    //Validate FullName
+    if(name==='name'){
+      if(value===""){
+        newError[name] = 'Vui lòng nhập họ tên';
+      }else{
+        newError[name] = '';
+      }
+    }
+
+  //validate phone Number
+  if (name === "phone") {
+    const regex = /^[0-9]+$/;
+    if (!regex.test(value)) {
+      newError[name] = "Số điện thoại không hợp lệ";
+    } else {
+      newError[name] = "";
+    }
+  }
+
+    // Set state
+    setValues(newValue);
+    setErrors(newError);
+  };
 
   const handleRegister = async (e) => {
-    if (email == '') {
-      alert('Không được bỏ trống ô tài khoản!');
+    const valuesAll=values;
+    const errorsAll=errors;
+    let flag = true;
+    //check empty inputs
+    for (let key in valuesAll) {
+      if (values[key].trim() === "") {
+        flag = false;
+      }
+    }
+    //check errors
+    for (let key in errorsAll) {
+      if (errorsAll[key] !== "") {
+        flag = false;
+      }
+    }
+    if(!flag){
+      alert("Dữ liệu không hợp lệ");
       return;
     }
-    if (name == '') {
-      alert('Không được bỏ trống ô tên');
-      return;
-    }
-    if (!isNumeric(phone)) {
-      alert('Hãy nhập đúng số trong ô điện thoại');
-      return;
-    }
-    if (validatedPass()) {
-      await AuthService.register(email, password, name, phone);
+    await AuthService.register(values.email, values.password, values.name, values.phone);
       navigator(config.routes.login);
-    }
-
   };
 
   return (
@@ -122,64 +177,79 @@ const FormRegister = () => {
             type="text"
             className="p-2x w-[95%] ml-2 rounded-md border shadow-md"
             placeholder="Nhập email của bạn"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={values.email}
+            name="email"
+            onChange={handleOnChange}
           />
+           <span class="text-red-500 font-sans ml-3"> {errors.email}</span>
         </div>
-        <div className="relative w-full py-2">
+        <div className="w-full pt-1">
+          <div className="relative">
           <input
             type={`${isShowPass ? "text" : "password"}`}
             className="p-2x w-[95%] ml-2 rounded-md border shadow-md"
             placeholder="Nhập mật khẩu"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={values.password}
+            name="password"
+            onChange={handleOnChange}
 
           />
           {isShowPass ? (
-            <EyeOff
-              className="absolute right-4 bottom-4"
-              onClick={() => setIsShowPass(!isShowPass)}
-              size={35}
-            />
-          ) : (
             <Eye
-              className="absolute right-3 bottom-4"
-              onClick={() => setIsShowPass(!isShowPass)}
-              size={35}
-            />
+            className="absolute right-4 bottom-4"
+            onClick={() => setIsShowPass(!isShowPass)}
+            size={35}
+          />
+          ) : (
+            
+            <EyeOff
+            className="absolute right-4 bottom-4"
+            onClick={() => setIsShowPass(!isShowPass)}
+            size={35}
+          />
           )}
+          </div>
+         <span class="text-red-500 font-sans ml-3">{errors.password}</span>
         </div>
-        <div className="w-full py-2">
+        <div className="w-full pb-2">
           <input
             type={`${isShowPass ? "text" : "password"}`}
             className="p-2x w-[95%] ml-2 rounded-md border shadow-md"
             placeholder="Nhập lại mật khẩu"
-            value={confPass}
-            onChange={(e) => setConfpass(e.target.value)}
+            value={values.confPass}
+            name="confPass"
+            onChange={handleOnChange}
 
           />
+           <span class="text-red-500 font-sans ml-3"> {errors.confPass}</span>
         </div>
         <div className="w-full py-2">
           <input
             type="text"
             className="p-2x w-[95%] ml-2 rounded-md border shadow-md"
             placeholder="Nhập tên"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            value={values.name}
+            name="name"
+            onChange={handleOnChange}
 
           />
+           <span class="text-red-500 font-sans ml-3"> {errors.name}</span>
         </div>
         <div className="w-full py-2">
           <input
             type="text"
             className="p-2x w-[95%] ml-2 rounded-md border shadow-md"
             placeholder="Nhập số điện thoại"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
+            value={values.phone}
+            name="phone"
+            onChange={handleOnChange}
           />
+           <span class="text-red-500 font-sans ml-3"> {errors.phone}</span>
         </div>
         <button
-          onClick={handleRegister}
+         onClick={(e) => {
+          handleRegister(e)
+        }}
           className=" ml-2 w-[95%] px-2x py-4 bg-WarningColor hover:opacity-75 text-white font-bold rounded-md "
         >
           <h5>Đăng ký</h5>
