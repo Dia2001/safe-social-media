@@ -6,6 +6,7 @@ import { AiOutlineGlobal } from 'react-icons/ai';
 import isAuthorize from "../utils/isAuthorize";
 import getUser from "../utils/getUser";
 import getCurrentUserId from "../utils/getCurrentUser";
+import config from "../config";
 const UpPost = ({ openPost }) => {
     const [auth, SetAuth] = useState(false)
     const [user, SetUser] = useState('');
@@ -55,7 +56,7 @@ const UpPost = ({ openPost }) => {
                 paragraph: text,
                 image: imageTmp,
             }
-            axios.post(`http://localhost:3080/post-article`, postArticle, {
+            axios.post(`${config.BASE_API_V2}/post-article`, postArticle, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                     "x-access-token": localStorage.getItem('token')

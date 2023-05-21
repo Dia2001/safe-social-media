@@ -5,6 +5,7 @@ import getCurrentUserId from "../../utils/getCurrentUser";
 import getUser from "../../utils/getUser";
 import axios from "axios";
 import moment from 'moment';
+import config from "../../config";
 
 const convertDate=(datetime)=>{
   const formattedDate = moment(datetime).format("DD-MM-YYYY");
@@ -55,7 +56,7 @@ const Profile = () => {
       }
       if (name != '' && phone != '') {
         const currentUserId = await getCurrentUserId();
-        const user = await axios.put('http://localhost:5010/api/v1/users/' + currentUserId, {
+        const user = await axios.put(`${config.BASE_API}/users/` + currentUserId, {
           name: name,
           phone: phone
         });

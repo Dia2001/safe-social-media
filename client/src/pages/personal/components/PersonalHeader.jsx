@@ -18,7 +18,7 @@ const PersonalHeader = () => {
             const getNameUser=await getUser(getCurrentUserId());
             SetUser(getNameUser.name);
             SetAvatar(getNameUser.avatar);
-            const getPostOfUser=(await axios.get('http://localhost:9999/home/'+getCurrentUserId())).data;
+            const getPostOfUser=(await axios.get(`${config.BASE_API_V1}/home/`+getCurrentUserId())).data;
             setCountArticle(getPostOfUser.length);
             
         })();

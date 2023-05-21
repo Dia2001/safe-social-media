@@ -5,6 +5,7 @@ import {GrFavorite} from "react-icons/gr"
 import {CgComment} from "react-icons/cg"
 import getUser from "../../../utils/getUser";
 import axios from "axios";
+import config from "../../../config";
 
 const getTimeAgo = (timestamp) => {
   const currentTimestamp = Date.now();
@@ -32,7 +33,7 @@ const Post = ({post}) => {
       (async ()=>{
         const userObject=await getUser(post.user)
         if(post.image){
-          setImgApi('http://localhost:9999/images/'+post.image);
+          setImgApi(`${config.BASE_API_V1}/images/`+post.image);
         }
         SetUser(userObject);
       })();

@@ -4,6 +4,7 @@ import { HiOutlinePencilSquare } from 'react-icons/hi2';
 import axios from 'axios';
 import LargePost from "../../../components/LargePost";
 import getCurrentUserId from "../../../utils/getCurrentUser";
+import config from "../../../config";
 const PersonalPost = () => {
   const [listOptions, SetListOptions] = useState(0)
   const [popUp, SetPopUp] = useState(false)
@@ -24,7 +25,7 @@ const PersonalPost = () => {
     
     const currentUserId = getCurrentUserId();
     if (currentUserId != null) {
-      axios.get('http://localhost:9999/home/' + currentUserId).then(async (res) => {
+      axios.get(`${config.BASE_API_V1}/home/` + currentUserId).then(async (res) => {
         setListPost(res.data);
         console.log(res.data);
        
@@ -121,7 +122,7 @@ const PersonalPost = () => {
     </div> :
       currrentPost.length>0?<div className="w-[708px] mx-auto grid gap-4 grid-cols-3 p-2">
       {currrentPost.map((item, key) => (
-        item.hasOwnProperty('image')?<img key={key} onClick={()=>popUpPost(item)} className="w-[209px] h-[209px] object-cover cursor-pointer hover:shadow-lg hover:shadow-indigo-500/40" src={'http://localhost:9999/images/' + item.image} />:<div key={key} onClick={()=>popUpPost(item)} className="w-[209px] break-all p-2 bg-BlackCool/5 h-[209px] object-cover cursor-pointer hover:shadow-lg hover:shadow-indigo-500/40">
+        item.hasOwnProperty('image')?<img key={key} onClick={()=>popUpPost(item)} className="w-[209px] h-[209px] object-cover cursor-pointer hover:shadow-lg hover:shadow-indigo-500/40" src={`${config.BASE_API_V1}/images/` + item.image} />:<div key={key} onClick={()=>popUpPost(item)} className="w-[209px] break-all p-2 bg-BlackCool/5 h-[209px] object-cover cursor-pointer hover:shadow-lg hover:shadow-indigo-500/40">
           <p>{item.text}</p>
         </div>
       ))

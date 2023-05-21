@@ -1,6 +1,7 @@
 const config = {
   BASE_API: process.env.REACT_APP_BASE_URL_API,
   BASE_API_V1: process.env.REACT_APP_GATEWAY_API,
+  BASE_API_V2: process.env.REACT_APP_POST_API,
   routes:{
     home:'/',
     login:'/dang-nhap',
