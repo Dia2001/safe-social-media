@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:mobile/constant.dart';
 import 'package:mobile/payload/request/register_request.dart';
 import 'package:mobile/payload/response/user_reponse.dart';
+import 'package:mobile/payload/request/user_edit_request.dart';
 
 class UserService {
   Future<UserResponse> fetchUser(String userId) async {
@@ -30,6 +31,20 @@ class UserService {
       return data['token'];
     } else {
       return null;
+    }
+  }
+
+  Future<bool> editUser(UserRequest userRequest) async {
+    final body = {'name': userRequest.name, 'phone': userRequest.phone};
+    final response = await http.put(
+        Uri.parse(host + '/api/v1/users/' + userRequest.id),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode(body));
+    if (response.statusCode == 200) {
+      // Map<String, dynamic> data = json.decode(response.body);
+      return true;
+    } else {
+      return false;
     }
   }
 }

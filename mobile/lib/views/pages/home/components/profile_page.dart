@@ -3,6 +3,9 @@ import 'package:mobile/payload/response/user_reponse.dart';
 import 'package:mobile/services/auth_service.dart';
 import 'package:mobile/utils/SharedPrefsUtil.dart';
 import 'package:mobile/views/components/need_to_login.dart';
+import 'package:mobile/payload/request/user_edit_request.dart';
+import 'package:mobile/services/user_service.dart';
+import 'package:mobile/views/dialog/custom_alert_dialog.dart';
 
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
@@ -15,8 +18,10 @@ class _ProfileState extends State<Profile> {
   TextEditingController _name = TextEditingController();
   TextEditingController _email = TextEditingController();
   TextEditingController _phone = TextEditingController();
+  String _id = "";
   UserResponse? _user;
   final AuthService _authService = AuthService();
+  final UserService _userService = UserService();
 
   @override
   void initState() {
@@ -33,9 +38,34 @@ class _ProfileState extends State<Profile> {
           _name.text = user.name;
           _phone.text = user.phone;
           _user = user;
+          _id = user.id;
         });
       }
     }
+  }
+
+  Future<void> edit() async {
+    UserRequest userRequest = UserRequest(
+        id: _id, name: _name.text.trim(), phone: _phone.text.trim());
+    bool check = await _userService.editUser(userRequest);
+    if (check) {
+      setState(() {
+        _name.text = userRequest.name;
+        _phone.text = userRequest.phone;
+      });
+    } else {
+      showLoginDialog(context);
+    }
+  }
+
+  void showLoginDialog(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return CustomAlertDialog(
+              title: "Sửa thông tin không thành công ",
+              text: "Vui lòng kiểm tra thông tin");
+        });
   }
 
   logout() async {
@@ -139,7 +169,7 @@ class _ProfileState extends State<Profile> {
                     height: 60,
                     margin: const EdgeInsets.only(top: 16, bottom: 16),
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () => edit(),
                       style: ButtonStyle(
                         shape: MaterialStateProperty.all(
                           RoundedRectangleBorder(
@@ -166,7 +196,7 @@ class _ProfileState extends State<Profile> {
                     height: 60,
                     margin: const EdgeInsets.only(top: 16, bottom: 16),
                     child: ElevatedButton(
-                      onPressed: () => logout(),
+                      onPressed: () async => await logout(),
                       style: ButtonStyle(
                         shape: MaterialStateProperty.all(
                           RoundedRectangleBorder(
