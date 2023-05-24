@@ -15,8 +15,11 @@ const Home = () => {
     const [popUp, SetPopUp] = useState(false);
     const [isAuth, SetIsAuth] = useState(false);
     useEffect( () => {
+        console.log("check");
+        console.log(config.BASE_API_V1);
         const getAllPost=axios.get(`${config.BASE_API_V1}/home`).then((response) => 
         {
+            console.log(response.data);
             if(response.status===200)
                 setListPosts(response.data);
             else

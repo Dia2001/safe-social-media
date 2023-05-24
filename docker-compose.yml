@@ -1,0 +1,59 @@
+version: '3'
+services:
+  auth:
+    build:
+      context: ./auth
+      dockerfile: Dockerfile
+    ports:
+      - '5010:5010'
+    environment:
+      - mongoURI=mongodb://host.docker.internal:27017/Users
+    networks:
+      - mynetwork
+
+  post:
+    build:
+      context: ./post
+      dockerfile: Dockerfile
+    ports:
+      - '3080:3080'
+    environment:
+      - MONGO_URI=mongodb://host.docker.internal:27017/Posts
+    networks:
+      - mynetwork
+
+  gateway:
+    build:
+      context: ./gateway
+      dockerfile: Dockerfile
+    ports:
+      - '9999:9999'
+    environment:
+      - AUTH_SERVICE_URL=http://auth:5010
+      - POST_SERVICE_URL=http://post:3080
+    networks:
+      - mynetwork
+      
+  mongodb:
+    image: mongo
+    ports:
+      - '27017:27017'
+    networks:
+      - mynetwork
+      
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    environment:
+      - REACT_APP_BASE_URL_API=http://localhost:9999/api/v1
+      - REACT_APP_GATEWAY_API=http://localhost:9999
+      - REACT_APP_POST_API=http://localhost:3080
+      - REACT_APP_BROWSER=chrome
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:

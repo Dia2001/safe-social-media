@@ -1,6 +1,7 @@
 const httpProxy = require("express-http-proxy");
 const dotenv = require("dotenv");
 dotenv.config();
+console.log("chek"+process.env.AUTH_SERVICE_URL);
 const authServiceProxy = httpProxy(process.env.AUTH_SERVICE_URL);
 const postServiceProxy = httpProxy(process.env.POST_SERVICE_URL);
 const express = require("express");
@@ -19,22 +20,6 @@ const storage=multer.diskStorage({
     }
 })
 const upload=multer({storage:storage})
-//for upload file
-
-
-
-// const path=require('path')
-// const multer=require("multer");
-// const storage=multer.diskStorage({
-//     destination:(req,file,cb)=>{
-//         cb(null,"E:/WebFrontEnd/nodejs-05-01-2023/microservice-post/post/public/images")
-//     },
-//     filename:(req,file,cb)=>{
-//         console.log(file);
-//         cb(null,Date.now()+path.extname(file.originalname))
-//     }
-// })
-// const upload=multer({storage:storage})
 
 class Routes {
  
@@ -44,6 +29,13 @@ class Routes {
 
   /* creating app Routes starts */
   appRoutes() {
+    this.app.get("/",(req, res) => {
+      const jsonData = {
+        message: "hello word"
+      };
+      res.json(jsonData);
+    });
+
     this.app.get("/api/v1/auth", (req, res) => {
       authServiceProxy(req, res);
     });
@@ -68,9 +60,6 @@ class Routes {
       authServiceProxy(req, res);
     });
 
-    // this.app.post("/post-article",upload.single('image'),(req, res) => {
-    //     postServiceProxy(req, res);
-    // });
     this.app.get("/api/v1/users/:id",(req, res) => {
       authServiceProxy(req, res);
     })
